@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">Baking-App</string>
+    <string name="app_name">Baking App</string>
+
+    <!-- Default recipe strings -->
+    <string name="recipe_unknown_measure">Unspecified</string>
+    <string name="recipe_unknown_ingredient">Not described</string>
+    <string name="recipe_step_short_description_missing">No short description</string>
+    <string name="recipe_step_description_missing">No description</string>
 </resources>

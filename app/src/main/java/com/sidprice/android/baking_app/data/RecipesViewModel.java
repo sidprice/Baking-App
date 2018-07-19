@@ -7,12 +7,16 @@ import android.annotation.SuppressLint;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.content.res.Resources;
 import android.graphics.LinearGradient;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.sidprice.android.baking_app.R;
+import com.sidprice.android.baking_app.model.Ingredient;
 import com.sidprice.android.baking_app.model.Recipe;
+import com.sidprice.android.baking_app.model.Step;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipesViewModel extends ViewModel {
@@ -147,24 +152,100 @@ public class RecipesViewModel extends ViewModel {
                     //
                     // Parse into Recipes
                     //
-                    List<Recipe>    new_recipes ;
-                    Recipe          new_recipe ;
+                    List<Recipe>    new_recipes = new ArrayList<>();
+                    Recipe          new_recipe = null;
                     Integer         recipe_count = jsonArray.length() ;
                     for ( int i = 0 ; i < recipe_count ; i++ ) {
                         //
-                        // Create a new recipe to receive this data
-                        //
-                        new_recipe = new Recipe() ;
+                        new_recipe = new Recipe() ; // Create a new recipe to receive this data
                         //
                         // Set the values from the current json array element
                         //
                         JSONObject  jsonObject = jsonArray.getJSONObject(i) ;
                         //
-                        // Get the recipe id
+                        new_recipe.setId(jsonObject.getInt(JSON_RECIPE_ID));    // Get the recipe id
+                        // Name
+                        if ( jsonObject.has(JSON_RECIPE_NAME)) { new_recipe.setName( jsonObject.getString(JSON_RECIPE_NAME)); }
+                        else { new_recipe.setName(""); }
+                        // Servings
+                        if ( jsonObject.has(JSON_RECIPE_SERVINGS)) { new_recipe.setServings( jsonObject.getInt(JSON_RECIPE_SERVINGS)); }
+                        else { new_recipe.setServings(1); }
+                        // Image
+                        if ( jsonObject.has(JSON_RECIPE_IMAGE)) { new_recipe.setImage( jsonObject.getString(JSON_RECIPE_IMAGE)); }
+                        else { new_recipe.setImage(""); }
+                        // Ingredients
+                        if ( jsonObject.has(JSON_RECIPE_INGREDIENTS)) {
+                            //
+                            // Iterate over the array of ingredients
+                            //
+                            JSONArray   ingredientsArray = jsonObject.getJSONArray(JSON_RECIPE_INGREDIENTS) ;
+                            List<Ingredient>    new_ingredients = new ArrayList<>() ;
+                            //
+                            for ( int j = 0 ; j < ingredientsArray.length() ; j++) {
+                                Ingredient  new_ingredient = new Ingredient() ;
+                                JSONObject  ingredientObject = ingredientsArray.getJSONObject(j) ;
+                                //  Quantity
+                                if ( ingredientObject.has(JSON_INGREDIENT_QUANTTIY)) { new_ingredient.setQuantity( ingredientObject.getDouble(JSON_RECIPE_IMAGE)); }
+                                else { new_ingredient.setQuantity(0); }
+                                //  Measure
+                                if ( ingredientObject.has(JSON_INGREDIENT_MEASURE)) { new_ingredient.setMeasure( ingredientObject.getString(JSON_INGREDIENT_MEASURE)); }
+                                else { new_ingredient.setMeasure(Resources.getSystem().getString(R.string.recipe_unknown_measure)); }
+                                //  Quantity
+                                if ( ingredientObject.has(JSON_INGREDIENT)) { new_ingredient.setIngredient( ingredientObject.getString(JSON_INGREDIENT)); }
+                                else { new_ingredient.setIngredient(Resources.getSystem().getString(R.string.recipe_unknown_ingredient)); }
+                                //
+                                // Add to the list of ingredients
+                                //
+                                new_ingredients.add(new_ingredient) ;
+                            }
+                            //
+                            // Add to the recipe
+                            //
+                            new_recipe.setIngredients(new_ingredients);
+                        }
+                        // Steps
+                        if ( jsonObject.has(JSON_RECIPE_INGREDIENTS)) {
+                            //
+                            // Iterate over the array of steps
+                            //
+                            JSONArray   stepsArray = jsonObject.getJSONArray(JSON_RECIPE_STEPS) ;
+                            List<Step>    new_steps = new ArrayList<>() ;
+                            //
+                            for ( int j = 0 ; j < stepsArray.length(); j++ ) {
+                                Step  new_step = new Step() ;
+                                JSONObject  stepObject = stepsArray.getJSONObject(j) ;
+                                // id
+                                new_step.setId( stepObject.getInt(JSON_STEP_ID));
+                                // short description
+                                if ( stepObject.has(JSON_STEP_SHORT_DESCRIPTION)) { new_step.setShort_description( stepObject.getString(JSON_STEP_SHORT_DESCRIPTION)); }
+                                else { new_step.setShort_description(Resources.getSystem().getString(R.string.recipe_step_short_description_missing)); }
+                                // description
+                                if ( stepObject.has(JSON_STEP_DESCRIPTION)) { new_step.setDescription( stepObject.getString(JSON_STEP_DESCRIPTION)); }
+                                else { new_step.setShort_description(Resources.getSystem().getString(R.string.recipe_step_description_missing)); }
+                                // video URL
+                                if ( stepObject.has(JSON_STEP_VIDEO_URL)) { new_step.setVideo_url( stepObject.getString(JSON_STEP_VIDEO_URL)); }
+                                else { new_step.setVideo_url(""); }
+                                // thumbnal URL
+                                if ( stepObject.has(JSON_STEP_THUMBNAIL_URL)) { new_step.setThumbnail_url( stepObject.getString(JSON_STEP_THUMBNAIL_URL)); }
+                                else { new_step.setThumbnail_url(""); }
+                                //
+                                // Add to list of steps
+                                //
+                                new_steps.add(new_step) ;
+                            }
+                            //
+                            // Add steps to the recipe
+                            //
+                            new_recipe.setSteps(new_steps);
+                        }
                         //
-
-
+                        // Add the recipe to the list of recipes
+                        //
+                        if ( new_recipe != null ) {
+                            new_recipes.add(new_recipe) ;
+                        }
                     }
+                    recipes.setValue(new_recipes);
 
                 } catch (JSONException ex ) {
                     Log.d(TAG, "onPostExecute:" + ex.getStackTrace());
