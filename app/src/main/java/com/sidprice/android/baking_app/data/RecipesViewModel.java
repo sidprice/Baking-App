@@ -185,7 +185,7 @@ public class RecipesViewModel extends ViewModel {
                                 Ingredient  new_ingredient = new Ingredient() ;
                                 JSONObject  ingredientObject = ingredientsArray.getJSONObject(j) ;
                                 //  Quantity
-                                if ( ingredientObject.has(JSON_INGREDIENT_QUANTTIY)) { new_ingredient.setQuantity( ingredientObject.getDouble(JSON_RECIPE_IMAGE)); }
+                                if ( ingredientObject.has(JSON_INGREDIENT_QUANTTIY)) { new_ingredient.setQuantity( ingredientObject.getDouble(JSON_INGREDIENT_QUANTTIY)); }
                                 else { new_ingredient.setQuantity(0); }
                                 //  Measure
                                 if ( ingredientObject.has(JSON_INGREDIENT_MEASURE)) { new_ingredient.setMeasure( ingredientObject.getString(JSON_INGREDIENT_MEASURE)); }
