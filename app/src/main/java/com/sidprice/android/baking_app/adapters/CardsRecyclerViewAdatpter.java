@@ -43,6 +43,7 @@ public class CardsRecyclerViewAdatpter extends RecyclerView.Adapter<CardsRecycle
                 //
                 // TODO image addition
                 //
+               // holder.mImage_ImageView.setImageResource(R.drawable.silverware_fork_knife);
             }
         }
     }
