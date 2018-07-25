@@ -1,11 +1,11 @@
-package com.sidprice.android.baking_app;
+package com.sidprice.android.baking_app.ui;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.sidprice.android.baking_app.R;
 import com.sidprice.android.baking_app.data.RecipesViewModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,7 +21,10 @@ public class MainActivity extends AppCompatActivity {
             //
             // Update the UI
             //
-            Log.d(TAG, "onCreate: Update the UI");
+            if ( recipes != null )
+            {
+                Log.d(TAG, "onCreate: Update the UI");
+            }
         });
     }
 }
