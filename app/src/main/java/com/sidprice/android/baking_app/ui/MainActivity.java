@@ -9,12 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.sidprice.android.baking_app.R;
+import com.sidprice.android.baking_app.adapters.CardsRecyclerViewAdatpter;
 import com.sidprice.android.baking_app.data.RecipesViewModel;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private RecyclerView    mCardRecyclerView ;
+    private CardsRecyclerViewAdatpter mCardsRecyclerViewAdapter;
     private Context         mContext ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         mCardRecyclerView = (RecyclerView)findViewById(R.id.cards_recycler_view) ;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext) ;
         mCardRecyclerView.setLayoutManager(linearLayoutManager);
-
+        //
         RecipesViewModel    recipesViewModel = ViewModelProviders.of(this).get(RecipesViewModel.class) ;
         recipesViewModel.getRecipes().observe(this, recipes -> {
             //
@@ -34,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
             if ( recipes != null )
             {
                 Log.d(TAG, "onCreate: Update the UI");
+                if ( mCardsRecyclerViewAdapter == null ) {
+                    mCardsRecyclerViewAdapter = new CardsRecyclerViewAdatpter(recipes) ;
+                }
+                mCardRecyclerView.setAdapter(mCardsRecyclerViewAdapter);
             }
         });
     }
