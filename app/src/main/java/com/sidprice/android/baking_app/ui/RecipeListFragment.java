@@ -14,15 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sidprice.android.baking_app.R;
-import com.sidprice.android.baking_app.adapters.CardsRecyclerViewAdatpter;
+import com.sidprice.android.baking_app.adapters.CardsRecyclerViewAdapter;
 import com.sidprice.android.baking_app.data.RecipesViewModel;
-
-import java.security.PublicKey;
 
 public class RecipeListFragment extends Fragment {
     private static final String TAG = RecipeListFragment.class.getSimpleName();
     private RecyclerView                mCardRecyclerView ;
-    private CardsRecyclerViewAdatpter   mCardsRecyclerViewAdapter;
+    private CardsRecyclerViewAdapter mCardsRecyclerViewAdapter;
     private Context                     mContext ;
     // Mandatory Empty Constructor
     public void RecipeListFragment() {
@@ -48,7 +46,7 @@ public class RecipeListFragment extends Fragment {
             {
                 Log.d(TAG, "onCreateView: Update the UI");
                 if ( mCardsRecyclerViewAdapter == null ) {
-                    mCardsRecyclerViewAdapter = new CardsRecyclerViewAdatpter(recipes) ;
+                    mCardsRecyclerViewAdapter = new CardsRecyclerViewAdapter(recipes) ;
                 }
                 mCardRecyclerView.setAdapter(mCardsRecyclerViewAdapter);
             }
