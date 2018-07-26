@@ -14,15 +14,15 @@ import com.sidprice.android.baking_app.model.Recipe;
 
 import java.util.List;
 
-public class CardsRecyclerViewAdatpter extends RecyclerView.Adapter<CardsRecyclerViewAdatpter.CardsViewHolder> {
+public class CardsRecyclerViewAdapter extends RecyclerView.Adapter<CardsRecyclerViewAdapter.CardsViewHolder> {
     List<Recipe>    mRecipes ;
-    public CardsRecyclerViewAdatpter(List<Recipe> recipes) {
+    public CardsRecyclerViewAdapter(List<Recipe> recipes) {
         this.mRecipes = recipes ;
     }
 
     @NonNull
     @Override
-    public CardsRecyclerViewAdatpter.CardsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CardsRecyclerViewAdapter.CardsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View    v = LayoutInflater.from(parent.getContext()).inflate((R.layout.item_recipe), parent, false) ;
         CardsViewHolder cardsViewHolder = new CardsViewHolder(v) ;
         return cardsViewHolder;
