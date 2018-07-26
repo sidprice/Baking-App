@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.sidprice.android.baking_app.R;
 import com.sidprice.android.baking_app.adapters.CardsRecyclerViewAdapter;
 
-public class MainActivity extends AppCompatActivity implements CardsRecyclerViewAdapter.OnRecipeClickListener {
+public class MainActivity extends AppCompatActivity  {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
@@ -16,14 +16,4 @@ public class MainActivity extends AppCompatActivity implements CardsRecyclerView
         setContentView(R.layout.activity_main);
     }
 
-    @Override
-    public void onSelectedRecipe(int position) {
-        //
-        // Launch the recipe details intent
-        //
-        // TODO  deal with tablet here
-        //
-        Intent  intent = new Intent(this, RecipeDetailsActivity.class) ;
-        startActivity(intent);
-    }
 }

@@ -2,6 +2,7 @@ package com.sidprice.android.baking_app.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,7 +18,7 @@ import com.sidprice.android.baking_app.R;
 import com.sidprice.android.baking_app.adapters.CardsRecyclerViewAdapter;
 import com.sidprice.android.baking_app.data.RecipesViewModel;
 
-public class RecipeListFragment extends Fragment {
+public class RecipeListFragment extends Fragment implements CardsRecyclerViewAdapter.OnRecipeClickListener {
     private static final String TAG = RecipeListFragment.class.getSimpleName();
     private RecyclerView                mCardRecyclerView ;
     private CardsRecyclerViewAdapter mCardsRecyclerViewAdapter;
@@ -46,7 +47,7 @@ public class RecipeListFragment extends Fragment {
             {
                 Log.d(TAG, "onCreateView: Update the UI");
                 if ( mCardsRecyclerViewAdapter == null ) {
-                    mCardsRecyclerViewAdapter = new CardsRecyclerViewAdapter(recipes) ;
+                    mCardsRecyclerViewAdapter = new CardsRecyclerViewAdapter(getContext() , recipes, this::onSelectedRecipe) ;
                 }
                 mCardRecyclerView.setAdapter(mCardsRecyclerViewAdapter);
             }
@@ -54,4 +55,16 @@ public class RecipeListFragment extends Fragment {
 
         return rootView;
     }
+
+    @Override
+    public void onSelectedRecipe(int position) {
+        //
+        // Launch the recipe details intent
+        //
+        // TODO  deal with tablet here
+        //
+        Intent intent = new Intent(getContext(), RecipeDetailsActivity.class) ;
+        startActivity(intent);
+    }
+
 }

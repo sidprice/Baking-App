@@ -1,7 +1,9 @@
 package com.sidprice.android.baking_app.adapters;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,23 +22,25 @@ public class CardsRecyclerViewAdapter extends RecyclerView.Adapter<CardsRecycler
     OnRecipeClickListener   mCallback ;
     Context                 mContext ;
 
-    public CardsRecyclerViewAdapter(List<Recipe> recipes) {
+    public CardsRecyclerViewAdapter( Context context, List<Recipe> recipes, OnRecipeClickListener callback) {
         this.mRecipes = recipes ;
+        mContext    = context ;
+        mCallback   = callback ;
     }
 
     @NonNull
     @Override
     public CardsRecyclerViewAdapter.CardsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        mContext = parent.getContext() ;
+        // mContext = parent.getContext() ;
         //
         // Ensure the host has implemented the OnRecipeClick callback
         //
-        try {
-            mCallback = (OnRecipeClickListener)mContext ;
-        } catch (ClassCastException ex ) {
-            throw new ClassCastException(mContext.toString() + " must implement OnRecipeClickListener") ;
-        }
-
+//        try {
+//            mCallback = (OnRecipeClickListener)mContext ;
+//        } catch (ClassCastException ex ) {
+//            throw new ClassCastException(mContext.toString() + " must implement OnRecipeClickListener") ;
+//        }
+//        mCallback = (OnRecipeClickListener) mContext ;
         View    v = LayoutInflater.from(parent.getContext()).inflate((R.layout.item_recipe), parent, false) ;
         CardsViewHolder cardsViewHolder = new CardsViewHolder(v) ;
         return cardsViewHolder;
