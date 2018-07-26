@@ -1,5 +1,6 @@
 package com.sidprice.android.baking_app.ui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -17,6 +18,12 @@ public class MainActivity extends AppCompatActivity implements CardsRecyclerView
 
     @Override
     public void onSelectedRecipe(int position) {
-
+        //
+        // Launch the recipe details intent
+        //
+        // TODO  deal with tablet here
+        //
+        Intent  intent = new Intent(this, RecipeDetailsActivity.class) ;
+        startActivity(intent);
     }
 }
