@@ -2,6 +2,7 @@ package com.sidprice.android.baking_app.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -38,13 +39,11 @@ public class RecipeDetailFragment extends Fragment {
         mIngredientsRecyclerView = (RecyclerView)rootView.findViewById(R.id.recipe_ingredients_recycler_view) ;
         mIngredientsRecyclerView.setLayoutManager(linearLayoutManager);
         RecipesViewModel recipesViewModel = ViewModelProviders.of(this).get(RecipesViewModel.class) ;
-        List<Recipe>    recipes = recipesViewModel.getRecipes().getValue() ;
+
+        Intent  intent = getActivity().getIntent() ;
+        Recipe  recipe = intent.getExtras().getParcelable("Recipe") ;
         //
-        // TODO - receive the current recipe position
-        //
-        List<Ingredient>    ingredients = recipes.get(0).getIngredients() ;
-        //
-        mRecipeIngredientsAdapter = new RecipeIngredientsAdaptor(ingredients) ;
+        mRecipeIngredientsAdapter = new RecipeIngredientsAdaptor(recipe.getIngredients()) ;
         mIngredientsRecyclerView.setAdapter(mRecipeIngredientsAdapter);
         return rootView ;
     }

@@ -1,11 +1,37 @@
 package com.sidprice.android.baking_app.model;
 
-public class Step {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Step implements Parcelable {
     private int     id ;
     private String  short_description ;
     private String  description ;
     private String  video_url ;
     private String  thumbnail_url ;
+
+    public Step() {
+
+    }
+    protected Step(Parcel in) {
+        id = in.readInt();
+        short_description = in.readString();
+        description = in.readString();
+        video_url = in.readString();
+        thumbnail_url = in.readString();
+    }
+
+    public static final Creator<Step> CREATOR = new Creator<Step>() {
+        @Override
+        public Step createFromParcel(Parcel in) {
+            return new Step(in);
+        }
+
+        @Override
+        public Step[] newArray(int size) {
+            return new Step[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -45,5 +71,19 @@ public class Step {
 
     public void setThumbnail_url(String thumbnail_url) {
         this.thumbnail_url = thumbnail_url;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(short_description);
+        dest.writeString(description);
+        dest.writeString(video_url);
+        dest.writeString(thumbnail_url);
     }
 }

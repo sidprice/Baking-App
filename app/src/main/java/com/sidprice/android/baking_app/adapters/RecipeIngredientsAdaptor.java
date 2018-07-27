@@ -3,6 +3,7 @@ package com.sidprice.android.baking_app.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -24,8 +25,8 @@ public class RecipeIngredientsAdaptor extends RecyclerView.Adapter<RecipeIngredi
     @Override
     public IngredientsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         mContext = parent.getContext() ;
-        TextView    tv = parent.findViewById(R.id.ingredient_description) ;
-        IngredientsViewHolder ingredientsViewHolder = new IngredientsViewHolder(tv) ;
+        View    v = LayoutInflater.from(parent.getContext()).inflate((R.layout.item_ingredient), parent, false) ;
+        IngredientsViewHolder ingredientsViewHolder = new IngredientsViewHolder(v) ;
         return ingredientsViewHolder;
     }
 
@@ -50,9 +51,9 @@ public class RecipeIngredientsAdaptor extends RecyclerView.Adapter<RecipeIngredi
     public class IngredientsViewHolder extends RecyclerView.ViewHolder {
         private TextView    mDescription_TextView ;
 
-        public IngredientsViewHolder(TextView itemView) {
+        public IngredientsViewHolder(View itemView) {
             super(itemView);
-            mDescription_TextView = itemView ;
+            mDescription_TextView = itemView.findViewById(R.id.ingredient_description) ;
         }
     }
 }
