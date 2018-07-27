@@ -1,6 +1,9 @@
 package com.sidprice.android.baking_app.adapters;
 
+import android.app.FragmentManager;
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,16 +17,31 @@ import com.sidprice.android.baking_app.model.Recipe;
 
 import java.util.List;
 
-public class CardsRecyclerViewAdatpter extends RecyclerView.Adapter<CardsRecyclerViewAdatpter.CardsViewHolder> {
-    List<Recipe>    mRecipes ;
-    public CardsRecyclerViewAdatpter(List<Recipe> recipes) {
+public class CardsRecyclerViewAdapter extends RecyclerView.Adapter<CardsRecyclerViewAdapter.CardsViewHolder> {
+    List<Recipe>            mRecipes ;
+    OnRecipeClickListener   mCallback ;
+    Context                 mContext ;
+
+    public CardsRecyclerViewAdapter( Context context, List<Recipe> recipes, OnRecipeClickListener callback) {
         this.mRecipes = recipes ;
+        mContext    = context ;
+        mCallback   = callback ;
     }
 
     @NonNull
     @Override
-    public CardsRecyclerViewAdatpter.CardsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View    v = LayoutInflater.from(parent.getContext()).inflate((R.layout.recipe_cardview_item), parent, false) ;
+    public CardsRecyclerViewAdapter.CardsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // mContext = parent.getContext() ;
+        //
+        // Ensure the host has implemented the OnRecipeClick callback
+        //
+//        try {
+//            mCallback = (OnRecipeClickListener)mContext ;
+//        } catch (ClassCastException ex ) {
+//            throw new ClassCastException(mContext.toString() + " must implement OnRecipeClickListener") ;
+//        }
+//        mCallback = (OnRecipeClickListener) mContext ;
+        View    v = LayoutInflater.from(parent.getContext()).inflate((R.layout.item_recipe), parent, false) ;
         CardsViewHolder cardsViewHolder = new CardsViewHolder(v) ;
         return cardsViewHolder;
     }
@@ -44,6 +62,15 @@ public class CardsRecyclerViewAdatpter extends RecyclerView.Adapter<CardsRecycle
                 // TODO image addition
                 //
                // holder.mImage_ImageView.setImageResource(R.drawable.silverware_fork_knife);
+                //
+                // Set click listener
+                //
+                holder.mCardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mCallback.onSelectedRecipe(position);
+                    }
+                });
             }
         }
     }
@@ -56,6 +83,13 @@ public class CardsRecyclerViewAdatpter extends RecyclerView.Adapter<CardsRecycle
             return mRecipes.size() ;
         }
     }
+    //
+    // Define an interface for the host activity to use to capture clicks
+    // on a recipe, this method uses a callback in the host activity
+    //
+    public interface OnRecipeClickListener {
+        void onSelectedRecipe(int position ) ;
+    }
 
     public static class CardsViewHolder extends RecyclerView.ViewHolder {
         private CardView    mCardView ;
@@ -65,7 +99,7 @@ public class CardsRecyclerViewAdatpter extends RecyclerView.Adapter<CardsRecycle
 
         public CardsViewHolder(View itemView) {
             super(itemView);
-            mCardView = (CardView) itemView.findViewById(R.id.cards_recycler_view) ;
+            mCardView = (CardView) itemView.findViewById(R.id.recipe_card_view) ;
             mName_TextView = (TextView) itemView.findViewById(R.id.recipe_name) ;
             mServings_TextView = (TextView) itemView.findViewById(R.id.recipe_servings) ;
             mImage_ImageView = (ImageView)itemView.findViewById(R.id.recipe_image) ;
