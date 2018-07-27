@@ -31,16 +31,6 @@ public class CardsRecyclerViewAdapter extends RecyclerView.Adapter<CardsRecycler
     @NonNull
     @Override
     public CardsRecyclerViewAdapter.CardsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // mContext = parent.getContext() ;
-        //
-        // Ensure the host has implemented the OnRecipeClick callback
-        //
-//        try {
-//            mCallback = (OnRecipeClickListener)mContext ;
-//        } catch (ClassCastException ex ) {
-//            throw new ClassCastException(mContext.toString() + " must implement OnRecipeClickListener") ;
-//        }
-//        mCallback = (OnRecipeClickListener) mContext ;
         View    v = LayoutInflater.from(parent.getContext()).inflate((R.layout.item_recipe), parent, false) ;
         CardsViewHolder cardsViewHolder = new CardsViewHolder(v) ;
         return cardsViewHolder;

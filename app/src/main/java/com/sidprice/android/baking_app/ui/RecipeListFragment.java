@@ -17,11 +17,13 @@ import android.view.ViewGroup;
 import com.sidprice.android.baking_app.R;
 import com.sidprice.android.baking_app.adapters.CardsRecyclerViewAdapter;
 import com.sidprice.android.baking_app.data.RecipesViewModel;
+import com.sidprice.android.baking_app.model.Recipe;
 
 public class RecipeListFragment extends Fragment implements CardsRecyclerViewAdapter.OnRecipeClickListener {
     private static final String TAG = RecipeListFragment.class.getSimpleName();
+    RecipesViewModel                    mRecipesViewModel ;
     private RecyclerView                mCardRecyclerView ;
-    private CardsRecyclerViewAdapter mCardsRecyclerViewAdapter;
+    private CardsRecyclerViewAdapter    mCardsRecyclerViewAdapter;
     private Context                     mContext ;
     // Mandatory Empty Constructor
     public void RecipeListFragment() {
@@ -38,8 +40,8 @@ public class RecipeListFragment extends Fragment implements CardsRecyclerViewAda
         mContext = getContext() ;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext) ;
         mCardRecyclerView.setLayoutManager(linearLayoutManager);
-        RecipesViewModel recipesViewModel = ViewModelProviders.of(this).get(RecipesViewModel.class) ;
-        recipesViewModel.getRecipes().observe(this, recipes -> {
+        mRecipesViewModel = ViewModelProviders.of(this).get(RecipesViewModel.class) ;
+        mRecipesViewModel.getRecipes().observe(this, recipes -> {
             //
             // Update the UI
             //
@@ -64,6 +66,11 @@ public class RecipeListFragment extends Fragment implements CardsRecyclerViewAda
         // TODO  deal with tablet here
         //
         Intent intent = new Intent(getContext(), RecipeDetailsActivity.class) ;
+        //
+        // Add the selected recipe to the Intent extra data
+        //
+        Recipe  selectedRecipe = mRecipesViewModel.getRecipes().getValue().get(position) ;
+        intent.putExtra("Recipe", selectedRecipe) ;
         startActivity(intent);
     }
 
