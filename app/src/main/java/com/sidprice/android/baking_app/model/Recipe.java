@@ -38,6 +38,14 @@ public class Recipe implements Parcelable {
         }
     };
 
+    public String getIngredientsString() {
+        StringBuilder   stringBuilder = new StringBuilder() ;
+        for ( int i = 0 ; i < ingredients.size() ; i++ ) {
+            stringBuilder.append( i+1 + ". " + ingredients.get(i).getIngredient() + "\n") ;
+        }
+        return stringBuilder.toString() ;
+    }
+
     public int getId() {
         return id;
     }
