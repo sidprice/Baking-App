@@ -19,7 +19,7 @@
         />
 
     <TextView
-        android:id="@+id/step_descrition"
+        android:id="@+id/step_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -30,7 +30,7 @@
         tools:text="1. Step one"/>
 
     <View
-        app:layout_constraintTop_toBottomOf="@id/step_descrition"
+        app:layout_constraintTop_toBottomOf="@id/step_description"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp"
         android:layout_width="match_parent"
