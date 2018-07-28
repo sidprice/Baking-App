@@ -16,6 +16,9 @@ import java.util.List;
 public class RecipeStepsRecyclerViewAdapter extends RecyclerView.Adapter<RecipeStepsRecyclerViewAdapter.StepViewHolder> {
     private Recipe  mRecipe ;
 
+    public RecipeStepsRecyclerViewAdapter( Recipe recipe ) {
+        mRecipe = recipe ;
+    }
     public interface OnStepClickListener {
         void onSelectedStep(int position) ;
     }

@@ -7,13 +7,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.sidprice.android.baking_app.R;
+import com.sidprice.android.baking_app.adapters.RecipeStepsRecyclerViewAdapter;
 import com.sidprice.android.baking_app.data.RecipesViewModel;
 import com.sidprice.android.baking_app.model.Recipe;
 
@@ -22,24 +25,35 @@ public class RecipeDetailFragment extends Fragment {
     private TextView    mRecipeName_tv ;
     private TextView    mServings_tv ;
     private TextView    mIngredients_tv ;
+    private ScrollView  mScrollView ;
 
-    private RecyclerView    mStepsDescriptionRecyclerView ;
+    private RecyclerView                    mStepsDescriptionRecyclerView ;
+    private RecipeStepsRecyclerViewAdapter  mStepsAdapter ;
+    private RecyclerView.LayoutManager      mLayoutManager ;
 
     private Context         mContext ;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mContext = getContext() ;
+        Intent  intent = getActivity().getIntent() ;
+        Recipe  recipe = intent.getExtras().getParcelable("Recipe") ;
+
         final View  rootView = inflater.inflate(R.layout.fragment_recipe_detail, container, false) ;
         mRecipeName_tv = (TextView)rootView.findViewById(R.id.recipe_detail_name) ;
         mServings_tv = (TextView)rootView.findViewById(R.id.recipe_detail_servings) ;
         mIngredients_tv = (TextView)rootView.findViewById(R.id.recipe_detail_ingredients) ;
-        mContext = getContext() ;
+        mStepsDescriptionRecyclerView = (RecyclerView)rootView.findViewById(R.id.recipe_step_detail_recycler_view) ;
+        mLayoutManager = new LinearLayoutManager(mContext) ;
+        mStepsDescriptionRecyclerView.setLayoutManager(mLayoutManager);
+        mStepsAdapter = new RecipeStepsRecyclerViewAdapter(recipe) ;
+        mStepsDescriptionRecyclerView.setAdapter(mStepsAdapter);
+        mScrollView = (ScrollView)rootView.findViewById(R.id.recipe_details_scrollview) ;
 
-        RecipesViewModel recipesViewModel = ViewModelProviders.of(this).get(RecipesViewModel.class) ;
+//
+//        RecipesViewModel recipesViewModel = ViewModelProviders.of(this).get(RecipesViewModel.class) ;
 
-        Intent  intent = getActivity().getIntent() ;
-        Recipe  recipe = intent.getExtras().getParcelable("Recipe") ;
         //
         updateUI(recipe) ;
         return rootView ;
@@ -49,5 +63,6 @@ public class RecipeDetailFragment extends Fragment {
         mRecipeName_tv.setText(recipe.getName());
         mServings_tv.setText("Serves: " + recipe.getServings());
         mIngredients_tv.setText(recipe.getIngredientsString());
+        mScrollView.fullScroll(ScrollView.FOCUS_UP) ;
     }
 }
