@@ -6,12 +6,15 @@
     android:layout_height="match_parent">
 
     <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:id="@+id/recipe_details_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,7 +26,7 @@
 
             <TextView
                 android:id="@+id/recipe_detail_name"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
@@ -32,7 +35,7 @@
 
             <TextView
                 android:id="@+id/recipe_detail_servings"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
@@ -45,7 +48,7 @@
 
             <TextView
                 android:id="@+id/recipe_detail_ingredients"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="4dp"
                 android:paddingLeft="16dp"
@@ -57,12 +60,18 @@
                 android:text="@string/recipe_steps_header"
                 style="@style/recipe_header"/>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recipe_step_description_recycler_view"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp" />
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recipe_step_detail_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:focusable="false"/>
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 
