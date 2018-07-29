@@ -82,6 +82,7 @@ public class RecipeDetailFragment extends Fragment implements RecipeStepsRecycle
         //
         Step    step = mSteps.get(position) ;
         intent.putExtra(Step.STEP_PARCEL_KEY, step) ;
+        intent.putExtra(Recipe.RECIPE_STEP_COUNT_KEY, mSteps.size()) ;
         startActivity(intent);
     }
 }
