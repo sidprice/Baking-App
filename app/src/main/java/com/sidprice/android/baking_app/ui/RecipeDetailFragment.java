@@ -33,7 +33,8 @@ public class RecipeDetailFragment extends Fragment implements RecipeStepsRecycle
     private RecyclerView                    mStepsDescriptionRecyclerView ;
     private RecipeStepsRecyclerViewAdapter  mStepsAdapter ;
     private RecyclerView.LayoutManager      mLayoutManager ;
-    List<Step>                              mSteps ;
+
+    private Recipe  mRecipe ;
 
     private Context         mContext ;
 
@@ -42,8 +43,7 @@ public class RecipeDetailFragment extends Fragment implements RecipeStepsRecycle
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mContext = getContext() ;
         Intent  intent = getActivity().getIntent() ;
-        Recipe  recipe = intent.getExtras().getParcelable(Recipe.RECIPE_PARCEL_KEY) ;
-        mSteps = recipe.getSteps() ;
+        mRecipe = intent.getExtras().getParcelable(Recipe.RECIPE_PARCEL_KEY) ;
 
         final View  rootView = inflater.inflate(R.layout.fragment_recipe_detail, container, false) ;
         mRecipeName_tv = (TextView)rootView.findViewById(R.id.recipe_detail_name) ;
@@ -52,11 +52,11 @@ public class RecipeDetailFragment extends Fragment implements RecipeStepsRecycle
         mStepsDescriptionRecyclerView = (RecyclerView)rootView.findViewById(R.id.recipe_step_detail_recycler_view) ;
         mLayoutManager = new LinearLayoutManager(mContext) ;
         mStepsDescriptionRecyclerView.setLayoutManager(mLayoutManager);
-        mStepsAdapter = new RecipeStepsRecyclerViewAdapter(recipe, this::onSelectedStep) ;
+        mStepsAdapter = new RecipeStepsRecyclerViewAdapter(mRecipe, this::onSelectedStep) ;
         mStepsDescriptionRecyclerView.setAdapter(mStepsAdapter);
         mScrollView = (ScrollView)rootView.findViewById(R.id.recipe_details_scrollview) ;
         //
-        updateUI(recipe) ;
+        updateUI(mRecipe) ;
         return rootView ;
     }
 
@@ -78,11 +78,10 @@ public class RecipeDetailFragment extends Fragment implements RecipeStepsRecycle
         //
         Intent intent = new Intent(getContext(), RecipeStepActivity.class) ;
         //
-        // Add the selected step to the Intent extra data
+        // Add the recipe to the Intent extra data
         //
-        Step    step = mSteps.get(position) ;
-        intent.putExtra(Step.STEP_PARCEL_KEY, step) ;
-        intent.putExtra(Recipe.RECIPE_STEP_COUNT_KEY, mSteps.size()) ;
+        intent.putExtra(Recipe.RECIPE_PARCEL_KEY, mRecipe) ;
+        intent.putExtra(Recipe.RECIPE_SELECTED_STEP, position) ;
         startActivity(intent);
     }
 }

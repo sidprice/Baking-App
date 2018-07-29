@@ -10,8 +10,6 @@ public class Step implements Parcelable {
     private String  video_url ;
     private String  thumbnail_url ;
 
-    public static final String STEP_PARCEL_KEY = "Step" ;
-
     public Step() {
 
     }
