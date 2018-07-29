@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Baking App</string>
+    <string name="app_name">Baking Time</string>
 
     <!-- Default recipe strings -->
     <string name="recipe_unknown_measure">Unspecified</string>
