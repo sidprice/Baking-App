@@ -2,19 +2,27 @@ package com.sidprice.android.baking_app.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.sidprice.android.baking_app.R;
 import com.sidprice.android.baking_app.model.Recipe;
 import com.sidprice.android.baking_app.model.Step;
@@ -26,7 +34,8 @@ public class RecipeStepFragment extends Fragment {
     private Context     mContext ;
     private TextView    mShortDescription_tv ;
     private TextView    mDescription_tv ;
-    private SimpleExoPlayerView mVideoPlayer ;
+    private SimpleExoPlayerView mPlayerView;
+    private SimpleExoPlayer     mExoPlayer ;
     private Button      mNextButton ;
     private Button      mPreviousButton ;
     private int         mCurrentStep ;
@@ -43,7 +52,7 @@ public class RecipeStepFragment extends Fragment {
         final View  rootView = inflater.inflate(R.layout.fragment_step_detail, container, false) ;
         mShortDescription_tv = (TextView)rootView.findViewById(R.id.step_short_description) ;
         mDescription_tv = (TextView)rootView.findViewById(R.id.step_description) ;
-        mVideoPlayer = (SimpleExoPlayerView)rootView.findViewById(R.id.step_video_player) ;
+        mPlayerView = (SimpleExoPlayerView)rootView.findViewById(R.id.step_video_player) ;
         mNextButton = (Button)rootView.findViewById(R.id.step_next) ;
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,8 +112,33 @@ public class RecipeStepFragment extends Fragment {
             mPreviousButton.setVisibility(Button.VISIBLE);
             mNextButton.setVisibility(Button.VISIBLE);
         }
-        //
-        // TODO play the video if there is one
-        //
+        if ( !step.getVideo_url().equals("") ) {
+            mPlayerView.setVisibility(View.VISIBLE);
+            initializeVideoPlayer();
+            setUriInPlayer(step) ;
+        } else {
+            mPlayerView.setVisibility(View.INVISIBLE); ;
+        }
+    }
+
+    private void initializeVideoPlayer() {
+        if ( mExoPlayer == null ) {
+            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), new DefaultTrackSelector(),
+                    new DefaultLoadControl());
+            mPlayerView.setPlayer(mExoPlayer);
+        }
+    }
+
+    private void setUriInPlayer(Step step) {
+        Context context = getContext();
+
+        String userAgent = Util.getUserAgent(context, "BakingTime");
+
+        Uri videoUri = Uri.parse(step.getVideo_url());
+        MediaSource mediaSource =
+                new ExtractorMediaSource(videoUri, new DefaultDataSourceFactory(context, userAgent),
+                        new DefaultExtractorsFactory(), null, null);
+        mExoPlayer.setPlayWhenReady(true);
+        mExoPlayer.prepare(mediaSource);
     }
 }
