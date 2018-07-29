@@ -19,6 +19,9 @@ import com.sidprice.android.baking_app.R;
 import com.sidprice.android.baking_app.adapters.RecipeStepsRecyclerViewAdapter;
 import com.sidprice.android.baking_app.data.RecipesViewModel;
 import com.sidprice.android.baking_app.model.Recipe;
+import com.sidprice.android.baking_app.model.Step;
+
+import java.util.List;
 
 public class RecipeDetailFragment extends Fragment implements RecipeStepsRecyclerViewAdapter.OnStepClickListener {
     private static final String TAG = RecipeDetailFragment.class.getSimpleName();
@@ -30,6 +33,7 @@ public class RecipeDetailFragment extends Fragment implements RecipeStepsRecycle
     private RecyclerView                    mStepsDescriptionRecyclerView ;
     private RecipeStepsRecyclerViewAdapter  mStepsAdapter ;
     private RecyclerView.LayoutManager      mLayoutManager ;
+    List<Step>                              mSteps ;
 
     private Context         mContext ;
 
@@ -39,6 +43,7 @@ public class RecipeDetailFragment extends Fragment implements RecipeStepsRecycle
         mContext = getContext() ;
         Intent  intent = getActivity().getIntent() ;
         Recipe  recipe = intent.getExtras().getParcelable(Recipe.RECIPE_PARCEL_KEY) ;
+        mSteps = recipe.getSteps() ;
 
         final View  rootView = inflater.inflate(R.layout.fragment_recipe_detail, container, false) ;
         mRecipeName_tv = (TextView)rootView.findViewById(R.id.recipe_detail_name) ;
@@ -66,6 +71,17 @@ public class RecipeDetailFragment extends Fragment implements RecipeStepsRecycle
 
     @Override
     public void onSelectedStep(int position) {
-
+        //
+        // Launch the recipe details intent
+        //
+        // TODO  deal with tablet here
+        //
+        Intent intent = new Intent(getContext(), RecipeStepActivity.class) ;
+        //
+        // Add the selected step to the Intent extra data
+        //
+        Step    step = mSteps.get(position) ;
+        intent.putExtra(Step.STEP_PARCEL_KEY, step) ;
+        startActivity(intent);
     }
 }

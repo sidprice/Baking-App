@@ -1,6 +1,7 @@
 package com.sidprice.android.baking_app.adapters;
 
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,12 +51,12 @@ public class RecipeStepsRecyclerViewAdapter extends RecyclerView.Adapter<RecipeS
                     Step step = steps.get(position) ;
                     holder.mShortDescription_tv.setText(step.getShort_description()) ;
                     holder.mDescription_tv.setText(step.getDescription());
-//                    holder.mScrollView.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            mCallback.onSelectedStep(position); ;
-//                        }
-//                    });
+                    holder.mItemContainer.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mCallback.onSelectedStep(position); ;
+                        }
+                    });
                 }
             }
         }
@@ -74,13 +75,13 @@ public class RecipeStepsRecyclerViewAdapter extends RecyclerView.Adapter<RecipeS
     public static class StepViewHolder extends RecyclerView.ViewHolder {
         private TextView    mShortDescription_tv ;
         private TextView    mDescription_tv ;
-        private ScrollView  mScrollView ;
+        private ConstraintLayout mItemContainer ;
 
         public StepViewHolder(View itemView) {
             super(itemView);
             mShortDescription_tv = (TextView)itemView.findViewById(R.id.step_short_description) ;
             mDescription_tv = (TextView)itemView.findViewById(R.id.step_description) ;
-            mScrollView = itemView.findViewById(R.id.step_scrollview) ;
+            mItemContainer = itemView.findViewById(R.id.step_item_container) ;
         }
     }
 }
