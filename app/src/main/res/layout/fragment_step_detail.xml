@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<android.support.v7.widget.LinearLayoutCompat
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"     >
-
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+    
     <ScrollView
-        android:id="@+id/detail_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        >
+        android:background="@color/white">
+
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -17,8 +18,7 @@
             android:paddingBottom="16dp"
             android:paddingTop="16dp"
             android:clickable="true"
-            android:focusable="true"
-            >
+            android:focusable="true">
 
             <TextView
                 android:id="@+id/step_short_description"
@@ -35,8 +35,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Starting prep"
-                />
+                tools:text="Starting prep"/>
+
             <TextView
                 android:id="@+id/step_description"
                 android:layout_width="0dp"
@@ -49,18 +49,19 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/step_short_description"
                 app:layout_constraintTop_toBottomOf="@+id/step_short_description"
-                tools:text="1. Preheat the oven to 350\u00b0F. Butter a 9 inch deep dish pie pan."
-                />
+                tools:text="1. Preheat the oven to 350\u00b0F. Butter a 9 inch deep dish pie pan."/>
 
+            <!-- ExoPlayer styling and layout inspired by Sienna Baking Time, thanks! -->
+            
             <com.google.android.exoplayer2.ui.SimpleExoPlayerView
                 android:id="@+id/step_video_player"
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="16dp"
                 style="@style/aspectRatio"
+                isVisible="@{presenter.viewModel.selectedStep.videoURL}"
                 app:layout_constraintBottom_toTopOf="@+id/step_previous"
-                app:layout_constraintTop_toBottomOf="@+id/step_description"
-                />
-
+                app:layout_constraintTop_toBottomOf="@+id/step_description" />
+            
             <Button
                 android:id="@+id/step_previous"
                 android:layout_width="wrap_content"
@@ -70,8 +71,8 @@
                 android:layout_marginStart="16dp"
                 android:text="@string/step_previous_label"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                />
+                app:layout_constraintStart_toStartOf="parent"/>
+
             <Button
                 android:id="@+id/step_next"
                 android:layout_width="wrap_content"
@@ -83,10 +84,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
-
         </android.support.constraint.ConstraintLayout>
-
     </ScrollView>
 
-</layout>
-
+</android.support.v7.widget.LinearLayoutCompat>
