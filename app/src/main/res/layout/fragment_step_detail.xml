@@ -1,84 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"     >
 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="true"
-    android:focusable="true"
-    android:orientation="vertical"
-    android:paddingBottom="16dp"
-    android:paddingTop="16dp">
+    <ScrollView
+        android:id="@+id/detail_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        >
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            >
 
-    <TextView
-        android:id="@+id/step_short_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:textSize="36sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Getting started" />
+            <TextView
+                android:id="@+id/step_short_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:textSize="36sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Starting prep"
+                />
+            <TextView
+                android:id="@+id/step_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/step_short_description"
+                app:layout_constraintTop_toBottomOf="@+id/step_short_description"
+                tools:text="1. Preheat the oven to 350\u00b0F. Butter a 9 inch deep dish pie pan."
+                />
 
-    <TextView
-        android:id="@+id/step_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:text="@{presenter.viewModel.selectedStep.description}"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/step_short_description"
-        app:layout_constraintTop_toBottomOf="@+id/step_short_description"
-        tools:text="1. Preheat the oven to 350F. Butter a 9 inch deep dish pie pan." />
+            <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+                android:id="@+id/step_video_player"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                style="@style/aspectRatio"
+                app:layout_constraintBottom_toTopOf="@+id/step_previous"
+                app:layout_constraintTop_toBottomOf="@+id/step_description"
+                />
 
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/step_video_player"
-        layout_constraintDimensionRatio="H,16:9"
-        layout_constraintLeft_toLeftOf="parent"
-        layout_constraintRight_toRightOf="parent"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/step_previous"
-        app:layout_constraintEnd_toEndOf="@+id/step_short_description"
-        app:layout_constraintStart_toStartOf="@+id/step_description"
-        app:layout_constraintTop_toBottomOf="@+id/step_description">
+            <Button
+                android:id="@+id/step_previous"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/step_previous_label"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+            <Button
+                android:id="@+id/step_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:text="@string/step_next_label"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
 
-    </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
+        </android.support.constraint.ConstraintLayout>
 
-    <Button
-        android:id="@+id/step_previous"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/step_previous_label"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/step_short_description" />
+    </ScrollView>
 
-    <Button
-        android:id="@+id/step_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/step_next_label"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/step_short_description"
-        app:layout_constraintTop_toTopOf="@+id/step_previous" />
-</android.support.constraint.ConstraintLayout>
+</layout>
+
