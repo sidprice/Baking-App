@@ -70,7 +70,7 @@ public class RecipeListFragment extends Fragment implements CardsRecyclerViewAda
         // Add the selected recipe to the Intent extra data
         //
         Recipe  selectedRecipe = mRecipesViewModel.getRecipes().getValue().get(position) ;
-        intent.putExtra("Recipe", selectedRecipe) ;
+        intent.putExtra(Recipe.RECIPE_PARCEL_KEY, selectedRecipe) ;
         startActivity(intent);
     }
 
