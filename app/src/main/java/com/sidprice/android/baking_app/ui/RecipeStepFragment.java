@@ -85,6 +85,22 @@ public class RecipeStepFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(RECIPE_CURRENT_STEP, mCurrentStep);
@@ -111,6 +127,14 @@ public class RecipeStepFragment extends Fragment {
         } else {
             mPreviousButton.setVisibility(Button.VISIBLE);
             mNextButton.setVisibility(Button.VISIBLE);
+        }
+        //
+        // If the player is playing ... stop it
+        //
+        if ( mExoPlayer != null ) {
+            if ( mExoPlayer.getPlaybackState() != SimpleExoPlayer.STATE_IDLE) {
+                mExoPlayer.stop();
+            }
         }
         if ( !step.getVideo_url().equals("") ) {
             mPlayerView.setVisibility(View.VISIBLE);
@@ -140,5 +164,12 @@ public class RecipeStepFragment extends Fragment {
                         new DefaultExtractorsFactory(), null, null);
         mExoPlayer.setPlayWhenReady(true);
         mExoPlayer.prepare(mediaSource);
+    }
+
+    private void releasePlayer() {
+        if (mExoPlayer != null) {
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
     }
 }
