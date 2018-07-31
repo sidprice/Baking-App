@@ -15,6 +15,7 @@ public class Recipe implements Parcelable {
 
     public static final String  RECIPE_PARCEL_KEY = "Recipe" ;
     public static final String  RECIPE_SELECTED_STEP = "RecipeSelectedStep" ;
+    public static final String  RECIPE_TWO_PANE_MODE = "RecipeTwoPaneMode" ;
     public Recipe() {
 
     }

@@ -85,20 +85,20 @@ public class RecipeDetailFragment extends Fragment implements RecipeStepsRecycle
 
     @Override
     public void onSelectedStep(int position) {
-        if ( mTwoPaneView == false ) {
-            //
-            // Launch the recipe details intent
-            //
-            Intent intent = new Intent(getContext(), RecipeStepActivity.class) ;
-            //
-            // Add the recipe to the Intent extra data
-            //
-            intent.putExtra(Recipe.RECIPE_PARCEL_KEY, mRecipe) ;
-            intent.putExtra(Recipe.RECIPE_SELECTED_STEP, position) ;
-            startActivity(intent);
-        } else {
-
-        }
+        //
+        // Launch the recipe details intent
+        //
+        Intent intent = new Intent(getContext(), RecipeStepActivity.class) ;
+        //
+        // Add the recipe to the Intent extra data
+        //
+        intent.putExtra(Recipe.RECIPE_PARCEL_KEY, mRecipe) ;
+        intent.putExtra(Recipe.RECIPE_SELECTED_STEP, position) ;
+        //
+        // And also two pane mode boolean
+        //
+        intent.putExtra(Recipe.RECIPE_TWO_PANE_MODE, mTwoPaneView) ;
+        startActivity(intent);
     }
 
     public void setRecipe(Recipe recipe) {

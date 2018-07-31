@@ -5,20 +5,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
-    
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/white">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
             android:orientation="vertical"
             android:paddingBottom="16dp"
-            android:paddingTop="16dp"
-            android:clickable="true"
-            android:focusable="true">
+            android:paddingTop="16dp">
 
             <TextView
                 android:id="@+id/step_description"
@@ -44,17 +44,19 @@
                 android:id="@+id/step_video_player"
                 style="@style/aspectRatio"
                 isVisible="@{presenter.viewModel.selectedStep.videoURL}"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
                 app:layout_constraintBottom_toTopOf="@+id/step_description"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:show_timeout="2"
+                app:default_artwork="@color/colorPrimaryDark"/>
 
             <Button
                 android:id="@+id/step_previous"
@@ -78,8 +80,7 @@
                 android:layout_marginRight="16dp"
                 android:text="@string/step_next_label"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
+                app:layout_constraintEnd_toEndOf="parent" />
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 

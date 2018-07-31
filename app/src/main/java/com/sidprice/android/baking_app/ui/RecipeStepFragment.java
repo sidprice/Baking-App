@@ -41,16 +41,27 @@ public class RecipeStepFragment extends Fragment {
     private Button      mPreviousButton ;
     private int         mCurrentStep ;
     private Recipe      mRecipe ;
+    private boolean     mTwoPaneMode ;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final View  rootView ;
         mContext = getContext() ;
-        Intent intent = getActivity().getIntent() ;
+        Activity activity = getActivity() ;
+        Intent intent = activity.getIntent() ;
         mRecipe = intent.getExtras().getParcelable(Recipe.RECIPE_PARCEL_KEY) ;
         mCurrentStep = intent.getIntExtra(Recipe.RECIPE_SELECTED_STEP, 0) ;
+        mTwoPaneMode = intent.getBooleanExtra(Recipe.RECIPE_TWO_PANE_MODE, false) ;
+        //
+        // Are we in tablet mode?
+        //
+        if ( mTwoPaneMode == true ) {
+            rootView = inflater.inflate(R.layout.fragment_step_detail_tablet, container, false) ;
+        } else {
+            rootView = inflater.inflate(R.layout.fragment_step_detail, container, false) ;
+        }
 
-        final View  rootView = inflater.inflate(R.layout.fragment_step_detail, container, false) ;
         mShortDescription_tv = (TextView)rootView.findViewById(R.id.step_short_description) ;
         mDescription_tv = (TextView)rootView.findViewById(R.id.step_description) ;
         mPlayerView = (SimpleExoPlayerView)rootView.findViewById(R.id.step_video_player) ;
