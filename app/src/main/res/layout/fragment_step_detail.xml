@@ -58,6 +58,17 @@
                 app:show_timeout="2"
                 app:default_artwork="@color/colorPrimaryDark"/>
 
+            <view
+                android:id="@+id/step_no_video_image"
+                android:visibility="invisible"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/colorAccent"
+                app:layout_constraintBottom_toBottomOf="@+id/step_video_player"
+                app:layout_constraintEnd_toEndOf="@+id/step_video_player"
+                app:layout_constraintStart_toStartOf="@+id/step_video_player"
+                app:layout_constraintTop_toTopOf="@+id/step_video_player" />
+
             <Button
                 android:id="@+id/step_previous"
                 android:layout_width="wrap_content"
