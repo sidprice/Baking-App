@@ -1,5 +1,6 @@
 package com.sidprice.android.baking_app.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -116,7 +117,10 @@ public class RecipeStepFragment extends Fragment {
     }
 
     private void UpdateUI(Step step) {
-        //mShortDescription_tv.setText(step.getShort_description());
+        //mShortDescription_tv.setText(step.getShort_description())
+
+        Activity activity = getActivity() ;
+        activity.setTitle(step.getShort_description());
         mDescription_tv.setText(step.getDescription());
         if ( mCurrentStep == 0 ) {
             mPreviousButton.setVisibility(Button.INVISIBLE);

@@ -25,14 +25,14 @@
             android:paddingBottom="16dp"
             android:background="@color/white">
 
-            <TextView
+    <!--        <TextView
                 android:id="@+id/recipe_detail_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:textSize="36sp"
-                tools:text="Nutella" />
+                tools:text="Nutella" /> -->
 
             <TextView
                 android:id="@+id/recipe_detail_servings"

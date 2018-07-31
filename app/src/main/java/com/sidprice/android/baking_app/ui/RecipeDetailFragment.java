@@ -1,5 +1,6 @@
 package com.sidprice.android.baking_app.ui;
 
+import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +26,7 @@ import java.util.List;
 
 public class RecipeDetailFragment extends Fragment implements RecipeStepsRecyclerViewAdapter.OnStepClickListener {
     private static final String TAG = RecipeDetailFragment.class.getSimpleName();
-    private TextView    mRecipeName_tv ;
+    // private TextView    mRecipeName_tv ;
     private TextView    mServings_tv ;
     private TextView    mIngredients_tv ;
     private ScrollView  mScrollView ;
@@ -57,7 +58,7 @@ public class RecipeDetailFragment extends Fragment implements RecipeStepsRecycle
         }
 
         final View  rootView = inflater.inflate(R.layout.fragment_recipe_detail, container, false) ;
-        mRecipeName_tv = (TextView)rootView.findViewById(R.id.recipe_detail_name) ;
+        // mRecipeName_tv = (TextView)rootView.findViewById(R.id.recipe_detail_name) ;
         mServings_tv = (TextView)rootView.findViewById(R.id.recipe_detail_servings) ;
         mIngredients_tv = (TextView)rootView.findViewById(R.id.recipe_detail_ingredients) ;
         mStepsDescriptionRecyclerView = (RecyclerView)rootView.findViewById(R.id.recipe_step_detail_recycler_view) ;
@@ -72,8 +73,10 @@ public class RecipeDetailFragment extends Fragment implements RecipeStepsRecycle
     }
 
     private void updateUI(Recipe recipe) {
+        Activity    activity = getActivity();
+        activity.setTitle(recipe.getName());
         if ( recipe != null ) {
-            mRecipeName_tv.setText(recipe.getName());
+            // mRecipeName_tv.setText(recipe.getName());
             mServings_tv.setText("Serves: " + recipe.getServings());
             mIngredients_tv.setText(recipe.getIngredientsString());
             mScrollView.fullScroll(ScrollView.FOCUS_UP) ;
