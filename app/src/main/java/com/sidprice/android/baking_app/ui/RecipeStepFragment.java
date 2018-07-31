@@ -36,6 +36,7 @@ public class RecipeStepFragment extends Fragment {
     private TextView    mShortDescription_tv ;
     private TextView    mDescription_tv ;
     private SimpleExoPlayerView mPlayerView;
+    private TextView     mPlayerNotAvailable;
     private SimpleExoPlayer     mExoPlayer ;
     private Button      mNextButton ;
     private Button      mPreviousButton ;
@@ -62,34 +63,29 @@ public class RecipeStepFragment extends Fragment {
             rootView = inflater.inflate(R.layout.fragment_step_detail, container, false) ;
         }
 
-        mShortDescription_tv = (TextView)rootView.findViewById(R.id.step_short_description) ;
-        mDescription_tv = (TextView)rootView.findViewById(R.id.step_description) ;
-        mPlayerView = (SimpleExoPlayerView)rootView.findViewById(R.id.step_video_player) ;
-        mNextButton = (Button)rootView.findViewById(R.id.step_next) ;
-        mNextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //
-                // Increment the current step value up to one less
-                // than the number of steps
-                //
-                if ( mCurrentStep != (mRecipe.getSteps().size()-1)) {
-                    mCurrentStep++ ;
-                    UpdateUI(mRecipe.getSteps().get(mCurrentStep));
-                }
+        mShortDescription_tv = rootView.findViewById(R.id.step_short_description) ;
+        mDescription_tv = rootView.findViewById(R.id.step_description);
+        mPlayerView = rootView.findViewById(R.id.step_video_player);
+        mPlayerNotAvailable = rootView.findViewById(R.id.step_no_video_image);
+        mNextButton = rootView.findViewById(R.id.step_next);
+        mNextButton.setOnClickListener(v -> {
+            //
+            // Increment the current step value up to one less
+            // than the number of steps
+            //
+            if ( mCurrentStep != (mRecipe.getSteps().size()-1)) {
+                mCurrentStep++ ;
+                UpdateUI(mRecipe.getSteps().get(mCurrentStep));
             }
         });
-        mPreviousButton = (Button)rootView.findViewById(R.id.step_previous) ;
-        mPreviousButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //
-                // Decrement the current step if it is not zero
-                //
-                if (mCurrentStep != 0 ) {
-                    mCurrentStep--;
-                    UpdateUI(mRecipe.getSteps().get(mCurrentStep));
-                }
+        mPreviousButton = rootView.findViewById(R.id.step_previous);
+        mPreviousButton.setOnClickListener(v -> {
+            //
+            // Decrement the current step if it is not zero
+            //
+            if (mCurrentStep != 0 ) {
+                mCurrentStep--;
+                UpdateUI(mRecipe.getSteps().get(mCurrentStep));
             }
         });
         //
@@ -153,10 +149,12 @@ public class RecipeStepFragment extends Fragment {
         }
         if ( !step.getVideo_url().equals("") ) {
             mPlayerView.setVisibility(View.VISIBLE);
+            mPlayerNotAvailable.setVisibility(View.INVISIBLE);
             initializeVideoPlayer();
             setUriInPlayer(step) ;
         } else {
-            mPlayerView.setVisibility(View.INVISIBLE); ;
+            mPlayerView.setVisibility(View.INVISIBLE);
+            mPlayerNotAvailable.setVisibility(View.VISIBLE);
         }
     }
 
