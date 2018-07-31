@@ -33,9 +33,6 @@
     <View
         app:layout_constraintTop_toBottomOf="@id/step_description"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/lightGrey"/>
+        style="@style/step_divider"/>
 
 </android.support.constraint.ConstraintLayout>
