@@ -116,7 +116,7 @@ public class RecipeStepFragment extends Fragment {
     }
 
     private void UpdateUI(Step step) {
-        mShortDescription_tv.setText(step.getShort_description());
+        //mShortDescription_tv.setText(step.getShort_description());
         mDescription_tv.setText(step.getDescription());
         if ( mCurrentStep == 0 ) {
             mPreviousButton.setVisibility(Button.INVISIBLE);
