@@ -36,14 +36,25 @@ public class RecipeDetailFragment extends Fragment implements RecipeStepsRecycle
 
     private Recipe  mRecipe ;
 
+    private boolean mTwoPaneView ;
+
     private Context         mContext ;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mContext = getContext() ;
-        Intent  intent = getActivity().getIntent() ;
-        mRecipe = intent.getExtras().getParcelable(Recipe.RECIPE_PARCEL_KEY) ;
+        if ( this.isAdded() == true ) {
+            if ( !getActivity().getClass().getSimpleName().equals("MainActivity")) {
+                Intent  intent = getActivity().getIntent() ;
+                mRecipe = intent.getExtras().getParcelable(Recipe.RECIPE_PARCEL_KEY) ;
+            } else {
+                mTwoPaneView = true ;
+                Bundle  bundle = new Bundle() ;
+                bundle = getArguments() ;
+                mRecipe = bundle.getParcelable(Recipe.RECIPE_PARCEL_KEY) ;
+            }
+        }
 
         final View  rootView = inflater.inflate(R.layout.fragment_recipe_detail, container, false) ;
         mRecipeName_tv = (TextView)rootView.findViewById(R.id.recipe_detail_name) ;
@@ -71,17 +82,24 @@ public class RecipeDetailFragment extends Fragment implements RecipeStepsRecycle
 
     @Override
     public void onSelectedStep(int position) {
-        //
-        // Launch the recipe details intent
-        //
-        // TODO  deal with tablet here
-        //
-        Intent intent = new Intent(getContext(), RecipeStepActivity.class) ;
-        //
-        // Add the recipe to the Intent extra data
-        //
-        intent.putExtra(Recipe.RECIPE_PARCEL_KEY, mRecipe) ;
-        intent.putExtra(Recipe.RECIPE_SELECTED_STEP, position) ;
-        startActivity(intent);
+        if ( mTwoPaneView == false ) {
+            //
+            // Launch the recipe details intent
+            //
+            Intent intent = new Intent(getContext(), RecipeStepActivity.class) ;
+            //
+            // Add the recipe to the Intent extra data
+            //
+            intent.putExtra(Recipe.RECIPE_PARCEL_KEY, mRecipe) ;
+            intent.putExtra(Recipe.RECIPE_SELECTED_STEP, position) ;
+            startActivity(intent);
+        } else {
+
+        }
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.mRecipe = recipe;
+        updateUI(recipe);
     }
 }
