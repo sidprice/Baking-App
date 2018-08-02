@@ -3,9 +3,9 @@
     android:configure="com.sidprice.android.baking_app.BakingTimeAppWidgetProviderConfigureActivity"
     android:initialKeyguardLayout="@layout/baking_time_app_widget_provider"
     android:initialLayout="@layout/baking_time_app_widget_provider"
-    android:minHeight="180dp"
-    android:minWidth="110dp"
-    android:previewImage="@drawable/example_appwidget_preview"
+    android:minHeight="150dp"
+    android:minWidth="180dp"
+    android:previewImage="@drawable/silverware_fork_knife"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="86400000"
     android:widgetCategory="home_screen"></appwidget-provider>

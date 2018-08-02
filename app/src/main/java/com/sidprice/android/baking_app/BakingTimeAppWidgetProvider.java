@@ -13,10 +13,12 @@ public class BakingTimeAppWidgetProvider extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
 
-        CharSequence widgetText = BakingTimeAppWidgetProviderConfigureActivity.loadTitlePref(context, appWidgetId);
+        CharSequence recipeName = BakingTimeAppWidgetProviderConfigureActivity.loadNameFromPref(context, appWidgetId);
+        CharSequence recipeIngredients = BakingTimeAppWidgetProviderConfigureActivity.loadIngredientsFromPref(context, appWidgetId) ;
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_time_app_widget_provider);
-        views.setTextViewText(R.id.appwidget_text, widgetText);
+        views.setTextViewText(R.id.appwidget_text, recipeName);
+        views.setTextViewText(R.id.appwidget_ingredients, recipeIngredients);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
