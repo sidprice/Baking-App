@@ -18,7 +18,7 @@ public class BakingTimeAppWidgetProvider extends AppWidgetProvider {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_time_app_widget_provider);
         views.setTextViewText(R.id.appwidget_text, recipeName);
-        views.setTextViewText(R.id.appwidget_ingredients, recipeIngredients);
+        //views.setTextViewText(R.id.appwidget_ingredients, recipeIngredients);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
