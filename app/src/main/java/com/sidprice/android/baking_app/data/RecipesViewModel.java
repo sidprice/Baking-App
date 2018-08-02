@@ -58,7 +58,7 @@ public class RecipesViewModel extends ViewModel {
     private final String    JSON_STEP_VIDEO_URL = "videoURL" ;
     private final String    JSON_STEP_THUMBNAIL_URL = "thumbnailURL" ;
 
-    private MutableLiveData<List<Recipe>>   recipes ;
+    private static MutableLiveData<List<Recipe>>   recipes ;
 
     public LiveData<List<Recipe>>   getRecipes() {
         if ( recipes == null) {
@@ -246,6 +246,12 @@ public class RecipesViewModel extends ViewModel {
                         }
                     }
                     recipes.setValue(new_recipes);
+                    //
+                    // Add to repository
+                    //
+                    RecipeRepository recipeRepository = RecipeRepository.getInstance() ;
+                    recipeRepository.setRecipes(recipes.getValue());
+
 
                 } catch (JSONException ex ) {
                     Log.d(TAG, "onPostExecute:" + ex.getStackTrace());
