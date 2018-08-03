@@ -5,6 +5,11 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.widget.RemoteViews;
 
+import com.sidprice.android.baking_app.data.RecipeRepository;
+import com.sidprice.android.baking_app.model.Recipe;
+
+import java.util.List;
+
 /**
  * Implementation of App Widget functionality.
  * App Widget Configuration implemented in {@link BakingTimeAppWidgetProviderConfigureActivity BakingTimeAppWidgetProviderConfigureActivity}
@@ -13,12 +18,12 @@ public class BakingTimeAppWidgetProvider extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
 
-        CharSequence recipeName = BakingTimeAppWidgetProviderConfigureActivity.loadNameFromPref(context, appWidgetId);
-        CharSequence recipeIngredients = BakingTimeAppWidgetProviderConfigureActivity.loadIngredientsFromPref(context, appWidgetId) ;
+        int recipeId = BakingTimeAppWidgetProviderConfigureActivity.loadRecipeId(context, appWidgetId);
+        List<Recipe> recipes = RecipeRepository.getInstance().getRecipes() ;
+        Recipe recipe = recipes.get(recipeId) ;
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_time_app_widget_provider);
-        views.setTextViewText(R.id.appwidget_text, recipeName);
-        //views.setTextViewText(R.id.appwidget_ingredients, recipeIngredients);
+        views.setTextViewText(R.id.appwidget_text, recipe.getName());
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);

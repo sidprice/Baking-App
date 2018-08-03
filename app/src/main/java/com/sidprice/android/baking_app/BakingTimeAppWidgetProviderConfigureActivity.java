@@ -24,8 +24,7 @@ public class BakingTimeAppWidgetProviderConfigureActivity extends AppCompatActiv
 
     private static final String PREFS_NAME = "com.sidprice.android.baking_app.BakingTimeAppWidgetProvider";
     private static final String PREF_PREFIX_KEY = "baking_time_";
-    private static final String PREF_RECIPE_NAME = PREF_PREFIX_KEY + "_name_" ;
-    private static final String PREF_RECIPE_INGREDIENTS = PREF_PREFIX_KEY + "_ingredients" ;
+    private static final String PREF_RECIPE_ID = PREF_PREFIX_KEY + "_id_" ;
 
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 
@@ -37,11 +36,10 @@ public class BakingTimeAppWidgetProviderConfigureActivity extends AppCompatActiv
         public void onClick(View v) {
             final Context context = BakingTimeAppWidgetProviderConfigureActivity.this;
             //
-            // Save the recipe name and the ingredients in prefs
+            // Save the recipe ID in the prefs
             //
-            String recipeName = mSpinner.getSelectedItem().toString() ;
-            String recipeIngredients = mRecipes.get(mSelecetdRecipe).getIngredientsString() ;
-            savePrefs(context, mAppWidgetId, recipeName, recipeIngredients);
+            int     recipeId = mSpinner.getSelectedItemPosition() ;
+            saveRecipeId(context, mAppWidgetId, recipeId);
 
             // It is the responsibility of the configuration activity to update the app widget
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
@@ -60,38 +58,21 @@ public class BakingTimeAppWidgetProviderConfigureActivity extends AppCompatActiv
     }
 
     // Write the recipe name and ingredients to the SharedPreferences object for this widget
-    static void savePrefs(Context context, int appWidgetId, String recipeName, String recipeIngredients) {
+    static void saveRecipeId(Context context, int appWidgetId, int recipeID) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putString(PREF_RECIPE_NAME + appWidgetId, recipeName);
-        prefs.putString(PREF_RECIPE_INGREDIENTS + appWidgetId, recipeIngredients) ;
+        prefs.putInt(PREF_RECIPE_ID + appWidgetId, recipeID);
         prefs.apply();
     }
 
     // Read the recipe name from the SharedPreferences
     // object for this widget.
     // If there is no preference saved, get the default from a resource
-    static String loadNameFromPref(Context context, int appWidgetId) {
+    static int loadRecipeId(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String nameValue = prefs.getString(PREF_RECIPE_NAME + appWidgetId, null);
-        if (nameValue != null) {
-            return nameValue;
-        } else {
-            return context.getString(R.string.appwidget_name);
-        }
+        int recipeId = prefs.getInt(PREF_RECIPE_ID + appWidgetId, 0);
+        return recipeId ;
     }
 
-    // Read the recipe ingredients from the SharedPreferences
-    // object for this widget.
-    // If there is no preference saved, get the default from a resource
-    static String loadIngredientsFromPref(Context context, int appWidgetId) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String ingredientsValue = prefs.getString(PREF_RECIPE_INGREDIENTS + appWidgetId, null);
-        if (ingredientsValue != null) {
-            return ingredientsValue;
-        } else {
-            return context.getString(R.string.appwidget_name);
-        }
-    }
 
     static void deleteTitlePref(Context context, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();

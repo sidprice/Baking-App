@@ -4,6 +4,10 @@ import android.widget.RemoteViewsService;
 
 import android.widget.RemoteViewsService.RemoteViewsFactory;
 
+import com.sidprice.android.baking_app.data.RecipeRepository;
+import com.sidprice.android.baking_app.model.Ingredient;
+import com.sidprice.android.baking_app.model.Recipe;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +28,13 @@ public class RecipeViewsFactory implements RemoteViewsService.RemoteViewsFactory
 
     @Override
     public void onDataSetChanged() {
-
+        RecipeRepository    recipeRepository = RecipeRepository.getInstance() ;
+        Recipe recipe = recipeRepository.getRecipes().get(recipeId) ;
+        List<Ingredient>    ingredientsList = recipe.getIngredients() ;
+        ingredients.clear();
+        for ( Ingredient ingredient : ingredientsList) {
+            ingredients.add( ingredient.getId() + ". " + ingredient.getIngredient() ) ;
+        }
     }
 
     @Override
