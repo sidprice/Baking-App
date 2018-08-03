@@ -13,4 +13,7 @@
     <string name="step_next_label">Next</string>
 
     <string name="video_not_available">No video available</string>
+    <string name="appwidget_name">Not selected</string>
+    <string name="configure">Select a recipe</string>
+    <string name="add_widget">Add widget</string>
 </resources>

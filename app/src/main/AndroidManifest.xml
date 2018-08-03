@@ -11,7 +11,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,6 +20,26 @@
         </activity>
         <activity android:name=".ui.RecipeDetailsActivity" />
         <activity android:name=".ui.RecipeStepActivity" />
+
+        <receiver android:name=".widget.BakingTimeAppWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/baking_time_app_widget_provider_info" />
+        </receiver>
+
+        <activity android:name=".widget.BakingTimeAppWidgetProviderConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+        <service
+            android:name="com.sidprice.android.baking_app.widget.RecipeWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:enabled="true"/>
     </application>
 
 </manifest>
