@@ -1,4 +1,4 @@
-package com.sidprice.android.baking_app;
+package com.sidprice.android.baking_app.widget;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.sidprice.android.baking_app.R;
 import com.sidprice.android.baking_app.data.RecipeRepository;
 import com.sidprice.android.baking_app.model.Recipe;
 
@@ -30,7 +31,6 @@ public class BakingTimeAppWidgetProviderConfigureActivity extends AppCompatActiv
 
     private Spinner mSpinner ;
     private List<Recipe>    mRecipes ;
-    private int             mSelecetdRecipe ;
 
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {

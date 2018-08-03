@@ -1,3 +1,5 @@
+package com.sidprice.android.baking_app.widget;
+
 import android.content.Context;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -32,8 +34,10 @@ public class RecipeViewsFactory implements RemoteViewsService.RemoteViewsFactory
         Recipe recipe = recipeRepository.getRecipes().get(recipeId) ;
         List<Ingredient>    ingredientsList = recipe.getIngredients() ;
         ingredients.clear();
+        int ingredient_number = 1 ;
         for ( Ingredient ingredient : ingredientsList) {
-            ingredients.add( ingredient.getId() + ". " + ingredient.getIngredient() ) ;
+            ingredients.add( ingredient_number + ". " + ingredient.getIngredient() ) ;
+            ingredient_number++ ;
         }
     }
 

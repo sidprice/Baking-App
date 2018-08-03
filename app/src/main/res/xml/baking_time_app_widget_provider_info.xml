@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:configure="com.sidprice.android.baking_app.BakingTimeAppWidgetProviderConfigureActivity"
+    android:configure="com.sidprice.android.baking_app.widget.BakingTimeAppWidgetProviderConfigureActivity"
     android:initialKeyguardLayout="@layout/baking_time_app_widget_provider"
     android:initialLayout="@layout/baking_time_app_widget_provider"
     android:minHeight="150dp"

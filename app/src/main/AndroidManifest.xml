@@ -21,7 +21,7 @@
         <activity android:name=".ui.RecipeDetailsActivity" />
         <activity android:name=".ui.RecipeStepActivity" />
 
-        <receiver android:name=".BakingTimeAppWidgetProvider">
+        <receiver android:name=".widget.BakingTimeAppWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -31,11 +31,15 @@
                 android:resource="@xml/baking_time_app_widget_provider_info" />
         </receiver>
 
-        <activity android:name=".BakingTimeAppWidgetProviderConfigureActivity">
+        <activity android:name=".widget.BakingTimeAppWidgetProviderConfigureActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
+        <service
+            android:name="com.sidprice.android.baking_app.widget.RecipeWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:enabled="true"/>
     </application>
 
 </manifest>
