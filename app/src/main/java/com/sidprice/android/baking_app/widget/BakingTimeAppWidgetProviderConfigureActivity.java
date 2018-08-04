@@ -2,6 +2,7 @@ package com.sidprice.android.baking_app.widget;
 
 import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +16,7 @@ import android.widget.Spinner;
 
 import com.sidprice.android.baking_app.R;
 import com.sidprice.android.baking_app.data.RecipeRepository;
+import com.sidprice.android.baking_app.data.RecipesViewModel;
 import com.sidprice.android.baking_app.model.Recipe;
 
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ public class BakingTimeAppWidgetProviderConfigureActivity extends AppCompatActiv
 
     private Spinner mSpinner ;
     private MutableLiveData<ArrayList<Recipe>>    mRecipes ;
+    RecipesViewModel    mRecipesViewModel ;
 
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
@@ -91,18 +94,15 @@ public class BakingTimeAppWidgetProviderConfigureActivity extends AppCompatActiv
         // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED);
         setContentView(R.layout.baking_time_app_widget_provider_configure);
-
         //
-        // Get recipes from repository
+        // Use the RecipeViewMOel to access the recipe data
         //
-        RecipeRepository    recipeRepository = RecipeRepository.getInstance() ;
-        mRecipes = recipeRepository.getRecipes() ;
-        mRecipes.observe( this, recipes -> {
+        mRecipesViewModel = ViewModelProviders.of(this).get(RecipesViewModel.class) ;
+        mRecipes = mRecipesViewModel.getRecipes() ;
+        mRecipesViewModel.getRecipes().observe(this, recipes -> {
             Log.d(TAG, "onCreate: Recipes changed");
             setupAdapter();
-        });
-        setupAdapter();
-
+        } ) ;
 
         findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
 
