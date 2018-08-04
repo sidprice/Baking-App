@@ -26,6 +26,12 @@ public class BakingTimeAppWidgetProvider extends AppWidgetProvider {
 
         int recipeId = BakingTimeAppWidgetProviderConfigureActivity.loadRecipeId(context, appWidgetId);
         ArrayList<Recipe> recipes = RecipeRepository.getInstance().getRecipes().getValue() ;
+        //
+        // Only continue if we have recipes
+        //
+        if ( recipes == null ){
+            return ;
+        }
         Recipe recipe = recipes.get(recipeId) ;
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_time_app_widget_provider);
