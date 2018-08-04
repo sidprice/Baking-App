@@ -1,11 +1,13 @@
 package com.sidprice.android.baking_app.widget;
 
 import android.appwidget.AppWidgetManager;
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,11 +28,12 @@ public class BakingTimeAppWidgetProviderConfigureActivity extends AppCompatActiv
     private static final String PREFS_NAME = "com.sidprice.android.baking_app.BakingTimeAppWidgetProvider";
     private static final String PREF_PREFIX_KEY = "baking_time_";
     private static final String PREF_RECIPE_ID = PREF_PREFIX_KEY + "_id_" ;
+    private static final String TAG = BakingTimeAppWidgetProviderConfigureActivity.class.getSimpleName();
 
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 
     private Spinner mSpinner ;
-    private List<Recipe>    mRecipes ;
+    private MutableLiveData<ArrayList<Recipe>>    mRecipes ;
 
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
@@ -94,21 +97,12 @@ public class BakingTimeAppWidgetProviderConfigureActivity extends AppCompatActiv
         //
         RecipeRepository    recipeRepository = RecipeRepository.getInstance() ;
         mRecipes = recipeRepository.getRecipes() ;
-        //
-        // Create the array of recipe names for display
-        //
-        ArrayList<String>    namesList = new ArrayList<>() ;
+        mRecipes.observe( this, recipes -> {
+            Log.d(TAG, "onCreate: Recipes changed");
+            setupAdapter();
+        });
+        setupAdapter();
 
-        for ( Recipe recipe : mRecipes ) {
-            namesList.add(recipe.getName()) ;
-        }
-        String[] recipeNames = new String[namesList.size()] ;
-        recipeNames = namesList.toArray(recipeNames) ;
-        mSpinner = findViewById(R.id.appwidget_spinner) ;
-        mSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, recipeNames) ;
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        mSpinner.setAdapter(adapter);
 
         findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
 
@@ -126,6 +120,25 @@ public class BakingTimeAppWidgetProviderConfigureActivity extends AppCompatActiv
         }
 
         //mAppWidgetText.setText(loadTitlePref(BakingTimeAppWidgetProviderConfigureActivity.this, mAppWidgetId));
+    }
+
+    private void setupAdapter() {
+        //
+        // Create the array of recipe names for display
+        //
+        ArrayList<String> namesList = new ArrayList<>() ;
+        if ( mRecipes.getValue() != null ) {
+            for ( Recipe recipe : mRecipes.getValue() ) {
+                namesList.add(recipe.getName()) ;
+            }
+            String[] recipeNames = new String[namesList.size()] ;
+            recipeNames = namesList.toArray(recipeNames) ;
+            mSpinner = findViewById(R.id.appwidget_spinner) ;
+            mSpinner.setOnItemSelectedListener(this);
+            ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, recipeNames) ;
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+            mSpinner.setAdapter(adapter);
+        }
     }
 
     @Override

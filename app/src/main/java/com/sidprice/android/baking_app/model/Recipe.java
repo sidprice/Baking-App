@@ -3,13 +3,14 @@ package com.sidprice.android.baking_app.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Recipe implements Parcelable {
     private int                 id ;
     private String              name ;
-    private List<Ingredient>    ingredients ;
-    private List<Step>          steps ;
+    private ArrayList<Ingredient> ingredients ;
+    private ArrayList<Step>          steps ;
     private int                 servings ;
     private String              image ;
 
@@ -69,7 +70,7 @@ public class Recipe implements Parcelable {
         return ingredients;
     }
 
-    public void setIngredients(List<Ingredient> ingredients) {
+    public void setIngredients(ArrayList<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 
@@ -77,7 +78,7 @@ public class Recipe implements Parcelable {
         return steps;
     }
 
-    public void setSteps(List<Step> steps) {
+    public void setSteps(ArrayList<Step> steps) {
         this.steps = steps;
     }
 

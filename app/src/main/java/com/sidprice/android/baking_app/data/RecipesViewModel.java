@@ -58,11 +58,11 @@ public class RecipesViewModel extends ViewModel {
     private final String    JSON_STEP_VIDEO_URL = "videoURL" ;
     private final String    JSON_STEP_THUMBNAIL_URL = "thumbnailURL" ;
 
-    private static MutableLiveData<List<Recipe>>   recipes ;
+    private static MutableLiveData<ArrayList<Recipe>>   recipes ;
 
-    public LiveData<List<Recipe>>   getRecipes() {
+    public MutableLiveData<ArrayList<Recipe>>   getRecipes() {
         if ( recipes == null) {
-            recipes = new MutableLiveData<List<Recipe>>() ;
+            recipes = new MutableLiveData<ArrayList<Recipe>>() ;
             loadRecipes() ;
         }
         return recipes ;
@@ -152,7 +152,7 @@ public class RecipesViewModel extends ViewModel {
                     //
                     // Parse into Recipes
                     //
-                    List<Recipe>    new_recipes = new ArrayList<>();
+                    ArrayList<Recipe>    new_recipes = new ArrayList<>();
                     Recipe          new_recipe = null;
                     Integer         recipe_count = jsonArray.length() ;
                     for ( int i = 0 ; i < recipe_count ; i++ ) {
@@ -179,7 +179,7 @@ public class RecipesViewModel extends ViewModel {
                             // Iterate over the array of ingredients
                             //
                             JSONArray   ingredientsArray = jsonObject.getJSONArray(JSON_RECIPE_INGREDIENTS) ;
-                            List<Ingredient>    new_ingredients = new ArrayList<>() ;
+                            ArrayList<Ingredient>    new_ingredients = new ArrayList<>() ;
                             //
                             for ( int j = 0 ; j < ingredientsArray.length() ; j++) {
                                 Ingredient  new_ingredient = new Ingredient() ;
@@ -209,7 +209,7 @@ public class RecipesViewModel extends ViewModel {
                             // Iterate over the array of steps
                             //
                             JSONArray   stepsArray = jsonObject.getJSONArray(JSON_RECIPE_STEPS) ;
-                            List<Step>    new_steps = new ArrayList<>() ;
+                            ArrayList<Step>    new_steps = new ArrayList<>() ;
                             //
                             for ( int j = 0 ; j < stepsArray.length(); j++ ) {
                                 Step  new_step = new Step() ;
@@ -225,7 +225,7 @@ public class RecipesViewModel extends ViewModel {
                                 // video URL
                                 if ( stepObject.has(JSON_STEP_VIDEO_URL)) { new_step.setVideo_url( stepObject.getString(JSON_STEP_VIDEO_URL)); }
                                 else { new_step.setVideo_url(""); }
-                                // thumbnal URL
+                                // thumbnail URL
                                 if ( stepObject.has(JSON_STEP_THUMBNAIL_URL)) { new_step.setThumbnail_url( stepObject.getString(JSON_STEP_THUMBNAIL_URL)); }
                                 else { new_step.setThumbnail_url(""); }
                                 //
@@ -250,7 +250,7 @@ public class RecipesViewModel extends ViewModel {
                     // Add to repository
                     //
                     RecipeRepository recipeRepository = RecipeRepository.getInstance() ;
-                    recipeRepository.setRecipes(recipes.getValue());
+                    recipeRepository.setRecipes(recipes);
 
 
                 } catch (JSONException ex ) {

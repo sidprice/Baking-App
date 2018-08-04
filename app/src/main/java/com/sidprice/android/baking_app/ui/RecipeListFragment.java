@@ -60,7 +60,7 @@ public class RecipeListFragment extends Fragment implements CardsRecyclerViewAda
         }
         mRecipesViewModel.getRecipes().observe(this, recipes -> {
             //
-            // Make sure the deatils fragment is instantiated
+            // Make sure the details fragment is instantiated
             //
             if ( mTwoPaneLayout ) {
                 if (mRecipeDetailFragment == null ) {
