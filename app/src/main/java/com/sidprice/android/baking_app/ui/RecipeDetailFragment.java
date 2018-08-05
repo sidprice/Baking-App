@@ -24,14 +24,17 @@ import com.sidprice.android.baking_app.model.Step;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class RecipeDetailFragment extends Fragment implements RecipeStepsRecyclerViewAdapter.OnStepClickListener {
     private static final String TAG = RecipeDetailFragment.class.getSimpleName();
     // private TextView    mRecipeName_tv ;
-    private TextView    mServings_tv ;
-    private TextView    mIngredients_tv ;
-    private ScrollView  mScrollView ;
+    @BindView(R.id.recipe_detail_servings)      TextView    mServings_tv ;
+    @BindView(R.id.recipe_detail_ingredients)   TextView    mIngredients_tv ;
+    @BindView(R.id.recipe_details_scrollview)   ScrollView  mScrollView ;
 
-    private RecyclerView                    mStepsDescriptionRecyclerView ;
+    @BindView(R.id.recipe_step_detail_recycler_view) RecyclerView   mStepsDescriptionRecyclerView ;
     private RecipeStepsRecyclerViewAdapter  mStepsAdapter ;
     private RecyclerView.LayoutManager      mLayoutManager ;
 
@@ -58,15 +61,12 @@ public class RecipeDetailFragment extends Fragment implements RecipeStepsRecycle
         }
 
         final View  rootView = inflater.inflate(R.layout.fragment_recipe_detail, container, false) ;
-        // mRecipeName_tv = (TextView)rootView.findViewById(R.id.recipe_detail_name) ;
-        mServings_tv = (TextView)rootView.findViewById(R.id.recipe_detail_servings) ;
-        mIngredients_tv = (TextView)rootView.findViewById(R.id.recipe_detail_ingredients) ;
-        mStepsDescriptionRecyclerView = (RecyclerView)rootView.findViewById(R.id.recipe_step_detail_recycler_view) ;
+        ButterKnife.bind(this, rootView) ;
+
         mLayoutManager = new LinearLayoutManager(mContext) ;
         mStepsDescriptionRecyclerView.setLayoutManager(mLayoutManager);
         mStepsAdapter = new RecipeStepsRecyclerViewAdapter(mRecipe, this::onSelectedStep) ;
         mStepsDescriptionRecyclerView.setAdapter(mStepsAdapter);
-        mScrollView = (ScrollView)rootView.findViewById(R.id.recipe_details_scrollview) ;
         //
         updateUI(mRecipe) ;
         return rootView ;
