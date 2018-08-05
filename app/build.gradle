@@ -43,3 +43,10 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
 }
+
+preBuild {
+    doFirst {
+        JavaCompile jc = android.applicationVariants.find { it.name == 'debug' }.javaCompile
+        jc.options.compilerArgs = ["-Xlint:unchecked"]
+    }
+}

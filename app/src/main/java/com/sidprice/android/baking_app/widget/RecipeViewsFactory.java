@@ -31,7 +31,7 @@ public class RecipeViewsFactory implements RemoteViewsService.RemoteViewsFactory
     @Override
     public void onDataSetChanged() {
         RecipeRepository    recipeRepository = RecipeRepository.getInstance() ;
-        Recipe recipe = recipeRepository.getRecipes().get(recipeId) ;
+        Recipe recipe = recipeRepository.getRecipes().getValue().get(recipeId) ;
         List<Ingredient>    ingredientsList = recipe.getIngredients() ;
         ingredients.clear();
         int ingredient_number = 1 ;

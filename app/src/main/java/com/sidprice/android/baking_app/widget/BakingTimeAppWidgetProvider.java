@@ -12,6 +12,7 @@ import com.sidprice.android.baking_app.data.RecipeRepository;
 import com.sidprice.android.baking_app.model.Recipe;
 import com.sidprice.android.baking_app.ui.MainActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +25,13 @@ public class BakingTimeAppWidgetProvider extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
 
         int recipeId = BakingTimeAppWidgetProviderConfigureActivity.loadRecipeId(context, appWidgetId);
-        List<Recipe> recipes = RecipeRepository.getInstance().getRecipes() ;
+        ArrayList<Recipe> recipes = RecipeRepository.getInstance().getRecipes().getValue() ;
+        //
+        // Only continue if we have recipes
+        //
+        if ( recipes == null ){
+            return ;
+        }
         Recipe recipe = recipes.get(recipeId) ;
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_time_app_widget_provider);

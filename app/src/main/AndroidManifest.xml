@@ -12,11 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.MainActivity">
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            -->
         </activity>
         <activity android:name=".ui.RecipeDetailsActivity" />
         <activity android:name=".ui.RecipeStepActivity" />
@@ -36,10 +38,24 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
+
         <service
-            android:name="com.sidprice.android.baking_app.widget.RecipeWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"
-            android:enabled="true"/>
+            android:name=".widget.RecipeWidgetService"
+            android:enabled="true"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <!--
+            The following activity is used ONLY for
+            debugging the Widget when MainActivity is not running. Uncomment
+            the intent-filter and comment out the MainActivity intent-filter
+            to debug the Widget standalone
+            -->
+        <activity android:name=".MainDebugWidget">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
