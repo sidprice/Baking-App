@@ -2,36 +2,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/lightGrey"
-    android:padding="@dimen/widget_margin">
+    android:padding="@dimen/widget_margin"
+
+    android:background="@drawable/widget_border"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/silverware_fork_knife"/>
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:adjustViewBounds="false"
+            android:cropToPadding="false"
+            android:scaleType="fitCenter"
+            android:src="@drawable/silverware_fork_knife" />
+
+        <TextView
+            android:id="@+id/appwidget_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"
+            android:contentDescription="@string/appwidget_name"
+            android:text="@string/appwidget_name"
+            android:textSize="24sp"
+            android:textStyle="bold|italic" />
+
     </LinearLayout>
-    <TextView
-        android:id="@+id/appwidget_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
-        android:contentDescription="@string/appwidget_name"
-        android:background="@color/lightGrey"
-        android:text="@string/appwidget_name"
-        android:textSize="24sp"
-        android:textStyle="bold|italic" />
 
     <ListView
         android:id="@+id/appwidget_ingredients"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/lightGrey"
+        android:background="#00000000"
         android:scrollbars="vertical"/>
 
 </LinearLayout>
