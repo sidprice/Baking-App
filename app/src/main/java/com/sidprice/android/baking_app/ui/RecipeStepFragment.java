@@ -28,18 +28,21 @@ import com.sidprice.android.baking_app.R;
 import com.sidprice.android.baking_app.model.Recipe;
 import com.sidprice.android.baking_app.model.Step;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class RecipeStepFragment extends Fragment {
     private static final String TAG = RecipeStepFragment.class.getSimpleName();
     private static final String RECIPE_CURRENT_STEP = "RecipeCurrentStep" ;
 
     private Context     mContext ;
-    private TextView    mShortDescription_tv ;
-    private TextView    mDescription_tv ;
-    private SimpleExoPlayerView mPlayerView;
-    private TextView     mPlayerNotAvailable;
+    @BindView(R.id.step_description)        TextView    mDescription_tv ;
+    @BindView(R.id.step_video_player)       SimpleExoPlayerView mPlayerView;
+    @BindView(R.id.step_no_video_image)     TextView     mPlayerNotAvailable;
+    @BindView(R.id.step_next)               Button      mNextButton ;
+    @BindView(R.id.step_previous)           Button      mPreviousButton ;
+
     private SimpleExoPlayer     mExoPlayer ;
-    private Button      mNextButton ;
-    private Button      mPreviousButton ;
     private int         mCurrentStep ;
     private Recipe      mRecipe ;
     private boolean     mTwoPaneMode ;
@@ -62,12 +65,7 @@ public class RecipeStepFragment extends Fragment {
         } else {
             rootView = inflater.inflate(R.layout.fragment_step_detail, container, false) ;
         }
-
-        mShortDescription_tv = rootView.findViewById(R.id.step_short_description) ;
-        mDescription_tv = rootView.findViewById(R.id.step_description);
-        mPlayerView = rootView.findViewById(R.id.step_video_player);
-        mPlayerNotAvailable = rootView.findViewById(R.id.step_no_video_image);
-        mNextButton = rootView.findViewById(R.id.step_next);
+        ButterKnife.bind(this, rootView) ;
         mNextButton.setOnClickListener(v -> {
             //
             // Increment the current step value up to one less
@@ -78,7 +76,7 @@ public class RecipeStepFragment extends Fragment {
                 UpdateUI(mRecipe.getSteps().get(mCurrentStep));
             }
         });
-        mPreviousButton = rootView.findViewById(R.id.step_previous);
+       // mPreviousButton = rootView.findViewById(R.id.step_previous);
         mPreviousButton.setOnClickListener(v -> {
             //
             // Decrement the current step if it is not zero
@@ -124,8 +122,6 @@ public class RecipeStepFragment extends Fragment {
     }
 
     private void UpdateUI(Step step) {
-        //mShortDescription_tv.setText(step.getShort_description())
-
         Activity activity = getActivity() ;
         activity.setTitle(step.getShort_description());
         mDescription_tv.setText(step.getDescription());

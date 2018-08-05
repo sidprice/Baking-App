@@ -17,6 +17,9 @@ import com.sidprice.android.baking_app.model.Recipe;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class CardsRecyclerViewAdapter extends RecyclerView.Adapter<CardsRecyclerViewAdapter.CardsViewHolder> {
     List<Recipe>            mRecipes ;
     OnRecipeClickListener   mCallback ;
@@ -82,17 +85,14 @@ public class CardsRecyclerViewAdapter extends RecyclerView.Adapter<CardsRecycler
     }
 
     public static class CardsViewHolder extends RecyclerView.ViewHolder {
-        private CardView    mCardView ;
-        private TextView    mName_TextView ;
-        private TextView    mServings_TextView ;
-        private ImageView   mImage_ImageView ;
+        @BindView(R.id.recipe_card_view)    CardView   mCardView ;
+        @BindView(R.id.recipe_name)         TextView    mName_TextView ;
+        @BindView(R.id.recipe_servings)     TextView    mServings_TextView ;
+        @BindView(R.id.recipe_image)        ImageView   mImage_ImageView ;
 
         public CardsViewHolder(View itemView) {
             super(itemView);
-            mCardView = (CardView) itemView.findViewById(R.id.recipe_card_view) ;
-            mName_TextView = (TextView) itemView.findViewById(R.id.recipe_name) ;
-            mServings_TextView = (TextView) itemView.findViewById(R.id.recipe_servings) ;
-            mImage_ImageView = (ImageView)itemView.findViewById(R.id.recipe_image) ;
+            ButterKnife.bind(this, itemView) ;
         }
     }
 }

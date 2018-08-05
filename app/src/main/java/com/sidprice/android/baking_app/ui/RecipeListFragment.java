@@ -22,11 +22,15 @@ import com.sidprice.android.baking_app.adapters.CardsRecyclerViewAdapter;
 import com.sidprice.android.baking_app.data.RecipesViewModel;
 import com.sidprice.android.baking_app.model.Recipe;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class RecipeListFragment extends Fragment implements CardsRecyclerViewAdapter.OnRecipeClickListener {
     private static final String TAG = RecipeListFragment.class.getSimpleName();
-    RecipesViewModel                    mRecipesViewModel ;
-    private RecyclerView                mCardRecyclerView ;
-    private CardsRecyclerViewAdapter    mCardsRecyclerViewAdapter;
+    RecipesViewModel                                    mRecipesViewModel ;
+    @BindView(R.id.cards_recycler_view) RecyclerView    mCardRecyclerView ;
+    private CardsRecyclerViewAdapter                    mCardsRecyclerViewAdapter;
+
     private RecipeDetailFragment        mRecipeDetailFragment ;
     private Context                     mContext ;
     private boolean                     mTwoPaneLayout ;
@@ -41,7 +45,7 @@ public class RecipeListFragment extends Fragment implements CardsRecyclerViewAda
         // Inflate the recipe master list fragment layout
         //
         final View  rootView  = inflater.inflate(R.layout.fragment_recipe_list, container, false );
-        mCardRecyclerView = (RecyclerView)rootView.findViewById(R.id.cards_recycler_view) ;
+        ButterKnife.bind(this, rootView) ;
         mContext = getContext() ;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext) ;
         mCardRecyclerView.setLayoutManager(linearLayoutManager);

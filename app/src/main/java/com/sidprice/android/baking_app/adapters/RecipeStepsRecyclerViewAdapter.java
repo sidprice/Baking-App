@@ -15,6 +15,9 @@ import com.sidprice.android.baking_app.model.Step;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class RecipeStepsRecyclerViewAdapter extends RecyclerView.Adapter<RecipeStepsRecyclerViewAdapter.StepViewHolder> {
     private Recipe  mRecipe ;
     private OnStepClickListener mCallback ;
@@ -73,15 +76,13 @@ public class RecipeStepsRecyclerViewAdapter extends RecyclerView.Adapter<RecipeS
     }
 
     public static class StepViewHolder extends RecyclerView.ViewHolder {
-        private TextView    mShortDescription_tv ;
-        private TextView    mDescription_tv ;
-        private ConstraintLayout mItemContainer ;
+        @BindView(R.id.step_short_description) TextView    mShortDescription_tv ;
+        @BindView(R.id.step_description) TextView    mDescription_tv ;
+        @BindView(R.id.step_item_container) ConstraintLayout mItemContainer ;
 
         public StepViewHolder(View itemView) {
             super(itemView);
-            mShortDescription_tv = (TextView)itemView.findViewById(R.id.step_short_description) ;
-            mDescription_tv = (TextView)itemView.findViewById(R.id.step_description) ;
-            mItemContainer = itemView.findViewById(R.id.step_item_container) ;
+            ButterKnife.bind(this, itemView) ;
         }
     }
 }
