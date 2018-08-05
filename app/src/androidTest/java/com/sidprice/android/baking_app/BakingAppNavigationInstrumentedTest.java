@@ -31,8 +31,8 @@ import static org.junit.Assert.assertEquals;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
-    
+public class BakingAppNavigationInstrumentedTest {
+
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
             MainActivity.class);
@@ -47,7 +47,7 @@ public class ExampleInstrumentedTest {
     }
 
     @Test
-    public void scrollToItemBelowFold_checkItsText() {
+    public void BakingApp_UI_navigation_checks() {
         // Click on the first entry of the recipe list
         onView(ViewMatchers.withId(R.id.cards_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
