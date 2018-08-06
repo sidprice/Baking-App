@@ -3,6 +3,7 @@ package com.sidprice.android.baking_app.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -113,6 +114,12 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        //
+        // Save the player state and position
+        //
+        mVideoPlayerState = mExoPlayer.getPlaybackState() ;
+        mVideoPlayerPosition = mExoPlayer.getCurrentPosition() ;
+        mExoPlayer.stop() ;
         if (Util.SDK_INT <= 23) {
             releasePlayer();
         }
@@ -142,6 +149,13 @@ public class RecipeStepFragment extends Fragment {
             mVideoPlayerPosition = savedInstanceState.getLong(RECIPE_VIDEO_POSITION) ;
             mVideoPlayerState = savedInstanceState.getInt(RECIPE_VIDEO_STATE) ;
         }
+        // UpdateUI(mRecipe.getSteps().get(mCurrentStep)) ;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
         UpdateUI(mRecipe.getSteps().get(mCurrentStep)) ;
     }
 
