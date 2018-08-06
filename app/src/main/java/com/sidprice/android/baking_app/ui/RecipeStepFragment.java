@@ -3,12 +3,18 @@ package com.sidprice.android.baking_app.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -34,6 +40,8 @@ import butterknife.ButterKnife;
 public class RecipeStepFragment extends Fragment {
     private static final String TAG = RecipeStepFragment.class.getSimpleName();
     private static final String RECIPE_CURRENT_STEP = "RecipeCurrentStep" ;
+    public static final String  RECIPE_VIDEO_STATE = "RecipeVideoState" ;
+    public static final String RECIPE_VIDEO_POSITION = "RecipeVideoPosition" ;
 
     private Context     mContext ;
     @BindView(R.id.step_description)        TextView    mDescription_tv ;
@@ -46,6 +54,9 @@ public class RecipeStepFragment extends Fragment {
     private int         mCurrentStep ;
     private Recipe      mRecipe ;
     private boolean     mTwoPaneMode ;
+    private boolean     mPlayerStateUnknown = true ;
+    private int         mVideoPlayerState = SimpleExoPlayer.STATE_IDLE;
+    private long        mVideoPlayerPosition = 0 ;
 
     @Nullable
     @Override
@@ -64,6 +75,12 @@ public class RecipeStepFragment extends Fragment {
             rootView = inflater.inflate(R.layout.fragment_step_detail_tablet, container, false) ;
         } else {
             rootView = inflater.inflate(R.layout.fragment_step_detail, container, false) ;
+            //
+            // Fragment used in Activity so set up the up navigation
+            //
+            setHasOptionsMenu(true) ;
+            ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar() ;
+           actionBar.setDisplayHomeAsUpEnabled(true);
         }
         ButterKnife.bind(this, rootView) ;
         mNextButton.setOnClickListener(v -> {
@@ -73,6 +90,8 @@ public class RecipeStepFragment extends Fragment {
             //
             if ( mCurrentStep != (mRecipe.getSteps().size()-1)) {
                 mCurrentStep++ ;
+                mVideoPlayerPosition = 0 ;
+                mVideoPlayerState = SimpleExoPlayer.STATE_IDLE ;
                 UpdateUI(mRecipe.getSteps().get(mCurrentStep));
             }
         });
@@ -83,6 +102,8 @@ public class RecipeStepFragment extends Fragment {
             //
             if (mCurrentStep != 0 ) {
                 mCurrentStep--;
+                mVideoPlayerPosition = 0 ;
+                mVideoPlayerState = SimpleExoPlayer.STATE_IDLE ;
                 UpdateUI(mRecipe.getSteps().get(mCurrentStep));
             }
         });
@@ -93,6 +114,12 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        //
+        // Save the player state and position
+        //
+        mVideoPlayerState = mExoPlayer.getPlaybackState() ;
+        mVideoPlayerPosition = mExoPlayer.getCurrentPosition() ;
+        mExoPlayer.stop() ;
         if (Util.SDK_INT <= 23) {
             releasePlayer();
         }
@@ -110,6 +137,8 @@ public class RecipeStepFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(RECIPE_CURRENT_STEP, mCurrentStep);
+        outState.putInt(RECIPE_VIDEO_STATE, mExoPlayer.getPlaybackState());
+        outState.putLong(RECIPE_VIDEO_POSITION, mExoPlayer.getCurrentPosition());
     }
 
     @Override
@@ -117,9 +146,46 @@ public class RecipeStepFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         if ( savedInstanceState != null ) {
             mCurrentStep = savedInstanceState.getInt(RECIPE_CURRENT_STEP) ;
+            mVideoPlayerPosition = savedInstanceState.getLong(RECIPE_VIDEO_POSITION) ;
+            mVideoPlayerState = savedInstanceState.getInt(RECIPE_VIDEO_STATE) ;
         }
+        // UpdateUI(mRecipe.getSteps().get(mCurrentStep)) ;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
         UpdateUI(mRecipe.getSteps().get(mCurrentStep)) ;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Activity    activity = getActivity() ;
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Intent upIntent = NavUtils.getParentActivityIntent(activity);
+                //
+                // Need to add the current recipe to the Intent extras
+                //
+                upIntent.putExtra(Recipe.RECIPE_PARCEL_KEY, mRecipe) ;
+                if (NavUtils.shouldUpRecreateTask(activity, upIntent)) {
+                    // This activity is NOT part of this app's task, so create a new task
+                    // when navigating up, with a synthesized back stack.
+                    TaskStackBuilder.create(mContext)
+                            // Add all of this activity's parents to the back stack
+                            .addNextIntentWithParentStack(upIntent)
+                            // Navigate up to the closest parent
+                            .startActivities();
+                } else {
+                    // This activity is part of this app's task, so simply
+                    // navigate up to the logical parent activity.
+                    NavUtils.navigateUpTo(activity, upIntent);
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);    }
 
     private void UpdateUI(Step step) {
         Activity activity = getActivity() ;
@@ -171,7 +237,11 @@ public class RecipeStepFragment extends Fragment {
         MediaSource mediaSource =
                 new ExtractorMediaSource(videoUri, new DefaultDataSourceFactory(context, userAgent),
                         new DefaultExtractorsFactory(), null, null);
-        mExoPlayer.setPlayWhenReady(true);
+        mExoPlayer.seekTo(mVideoPlayerPosition);
+        if ( mVideoPlayerState != SimpleExoPlayer.STATE_IDLE || mPlayerStateUnknown ) {
+            mPlayerStateUnknown = false ;
+            mExoPlayer.setPlayWhenReady(true);
+        }
         mExoPlayer.prepare(mediaSource);
     }
 
