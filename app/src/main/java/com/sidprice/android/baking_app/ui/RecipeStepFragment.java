@@ -39,6 +39,8 @@ import butterknife.ButterKnife;
 public class RecipeStepFragment extends Fragment {
     private static final String TAG = RecipeStepFragment.class.getSimpleName();
     private static final String RECIPE_CURRENT_STEP = "RecipeCurrentStep" ;
+    public static final String  RECIPE_VIDEO_STATE = "RecipeVideoState" ;
+    public static final String RECIPE_VIDEO_POSITION = "RecipeVideoPosition" ;
 
     private Context     mContext ;
     @BindView(R.id.step_description)        TextView    mDescription_tv ;
@@ -51,6 +53,9 @@ public class RecipeStepFragment extends Fragment {
     private int         mCurrentStep ;
     private Recipe      mRecipe ;
     private boolean     mTwoPaneMode ;
+    private boolean     mPlayerStateUnknown = true ;
+    private int         mVideoPlayerState = SimpleExoPlayer.STATE_IDLE;
+    private long        mVideoPlayerPosition = 0 ;
 
     @Nullable
     @Override
@@ -84,6 +89,8 @@ public class RecipeStepFragment extends Fragment {
             //
             if ( mCurrentStep != (mRecipe.getSteps().size()-1)) {
                 mCurrentStep++ ;
+                mVideoPlayerPosition = 0 ;
+                mVideoPlayerState = SimpleExoPlayer.STATE_IDLE ;
                 UpdateUI(mRecipe.getSteps().get(mCurrentStep));
             }
         });
@@ -94,6 +101,8 @@ public class RecipeStepFragment extends Fragment {
             //
             if (mCurrentStep != 0 ) {
                 mCurrentStep--;
+                mVideoPlayerPosition = 0 ;
+                mVideoPlayerState = SimpleExoPlayer.STATE_IDLE ;
                 UpdateUI(mRecipe.getSteps().get(mCurrentStep));
             }
         });
@@ -121,6 +130,8 @@ public class RecipeStepFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(RECIPE_CURRENT_STEP, mCurrentStep);
+        outState.putInt(RECIPE_VIDEO_STATE, mExoPlayer.getPlaybackState());
+        outState.putLong(RECIPE_VIDEO_POSITION, mExoPlayer.getCurrentPosition());
     }
 
     @Override
@@ -128,6 +139,8 @@ public class RecipeStepFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         if ( savedInstanceState != null ) {
             mCurrentStep = savedInstanceState.getInt(RECIPE_CURRENT_STEP) ;
+            mVideoPlayerPosition = savedInstanceState.getLong(RECIPE_VIDEO_POSITION) ;
+            mVideoPlayerState = savedInstanceState.getInt(RECIPE_VIDEO_STATE) ;
         }
         UpdateUI(mRecipe.getSteps().get(mCurrentStep)) ;
     }
@@ -210,7 +223,11 @@ public class RecipeStepFragment extends Fragment {
         MediaSource mediaSource =
                 new ExtractorMediaSource(videoUri, new DefaultDataSourceFactory(context, userAgent),
                         new DefaultExtractorsFactory(), null, null);
-        mExoPlayer.setPlayWhenReady(true);
+        mExoPlayer.seekTo(mVideoPlayerPosition);
+        if ( mVideoPlayerState != SimpleExoPlayer.STATE_IDLE || mPlayerStateUnknown ) {
+            mPlayerStateUnknown = false ;
+            mExoPlayer.setPlayWhenReady(true);
+        }
         mExoPlayer.prepare(mediaSource);
     }
 
