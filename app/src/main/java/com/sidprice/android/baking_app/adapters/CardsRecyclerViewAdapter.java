@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.sidprice.android.baking_app.R;
 import com.sidprice.android.baking_app.model.Recipe;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -52,9 +53,11 @@ public class CardsRecyclerViewAdapter extends RecyclerView.Adapter<CardsRecycler
                 holder.mName_TextView.setText(recipe.getName());
                 holder.mServings_TextView.setText("Serves " + recipe.getServings() + " people");
                 //
-                // TODO image addition
-                //
-               // holder.mImage_ImageView.setImageResource(R.drawable.silverware_fork_knife);
+                if ( recipe.getImage().equals("")) {
+                    holder.mImage_ImageView.setImageResource(R.drawable.silverware_fork_knife);
+                } else {
+                    Picasso.get().load(recipe.getImage()).into(holder.mImage_ImageView);
+                }
                 //
                 // Set click listener
                 //
