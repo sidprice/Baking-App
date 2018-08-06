@@ -1,7 +1,6 @@
 package com.sidprice.android.baking_app.data;
 
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -23,9 +22,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
-public class RecipeRepository {
+public final class RecipeRepository {
     private static final String TAG = RecipeRepository.class.getSimpleName();
 
     private final   String  recipes_url = "http://go.udacity.com/android-baking-app-json" ;
@@ -42,7 +40,7 @@ public class RecipeRepository {
     //
     // ingredient keys
     //
-    private final String    JSON_INGREDIENT_QUANTTIY = "quantity" ;
+    private final String    JSON_INGREDIENT_QUANTITY = "quantity" ;
     private final String    JSON_INGREDIENT_MEASURE = "measure" ;
     private final String    JSON_INGREDIENT = "ingredient" ;
     //
@@ -182,7 +180,7 @@ public class RecipeRepository {
                                 Ingredient  new_ingredient = new Ingredient() ;
                                 JSONObject  ingredientObject = ingredientsArray.getJSONObject(j) ;
                                 //  Quantity
-                                if ( ingredientObject.has(JSON_INGREDIENT_QUANTTIY)) { new_ingredient.setQuantity( ingredientObject.getDouble(JSON_INGREDIENT_QUANTTIY)); }
+                                if ( ingredientObject.has(JSON_INGREDIENT_QUANTITY)) { new_ingredient.setQuantity( ingredientObject.getDouble(JSON_INGREDIENT_QUANTITY)); }
                                 else { new_ingredient.setQuantity(0); }
                                 //  Measure
                                 if ( ingredientObject.has(JSON_INGREDIENT_MEASURE)) { new_ingredient.setMeasure( ingredientObject.getString(JSON_INGREDIENT_MEASURE)); }
