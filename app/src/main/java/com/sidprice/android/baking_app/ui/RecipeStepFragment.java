@@ -13,6 +13,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,12 +22,19 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.Player.EventListener;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
@@ -42,6 +50,7 @@ public class RecipeStepFragment extends Fragment {
     private static final String RECIPE_CURRENT_STEP = "RecipeCurrentStep" ;
     public static final String  RECIPE_VIDEO_STATE = "RecipeVideoState" ;
     public static final String RECIPE_VIDEO_POSITION = "RecipeVideoPosition" ;
+    public static final String  RECIPE_VIDEO_PLAY_WHEN_READY = "PlayWhenReady" ;
 
     private Context     mContext ;
     @BindView(R.id.step_description)        TextView    mDescription_tv ;
@@ -57,6 +66,7 @@ public class RecipeStepFragment extends Fragment {
     private boolean     mPlayerStateUnknown = true ;
     private int         mVideoPlayerState = SimpleExoPlayer.STATE_IDLE;
     private long        mVideoPlayerPosition = 0 ;
+    private boolean     mPlayWhenReady = true;
 
     @Nullable
     @Override
@@ -114,14 +124,11 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        //
-        // Save the player state and position
-        //
-        mVideoPlayerState = mExoPlayer.getPlaybackState() ;
-        mVideoPlayerPosition = mExoPlayer.getCurrentPosition() ;
-        mExoPlayer.stop() ;
-        if (Util.SDK_INT <= 23) {
-            releasePlayer();
+        if ( mExoPlayer != null ) { // Step has video ?
+            mExoPlayer.stop() ;
+            if (Util.SDK_INT <= 23) {
+                releasePlayer();
+            }
         }
     }
 
@@ -137,8 +144,14 @@ public class RecipeStepFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(RECIPE_CURRENT_STEP, mCurrentStep);
-        outState.putInt(RECIPE_VIDEO_STATE, mExoPlayer.getPlaybackState());
-        outState.putLong(RECIPE_VIDEO_POSITION, mExoPlayer.getCurrentPosition());
+        outState.putInt(RECIPE_VIDEO_STATE, mVideoPlayerState) ;
+        outState.putBoolean(RECIPE_VIDEO_PLAY_WHEN_READY, mPlayWhenReady);
+        if ( mExoPlayer != null ) {
+            outState.putLong(RECIPE_VIDEO_POSITION, mExoPlayer.getCurrentPosition());
+        } else {
+            // outState.putInt(RECIPE_VIDEO_STATE, SimpleExoPlayer.STATE_IDLE) ;
+            outState.putLong(RECIPE_VIDEO_POSITION, 0);
+        }
     }
 
     @Override
@@ -148,6 +161,7 @@ public class RecipeStepFragment extends Fragment {
             mCurrentStep = savedInstanceState.getInt(RECIPE_CURRENT_STEP) ;
             mVideoPlayerPosition = savedInstanceState.getLong(RECIPE_VIDEO_POSITION) ;
             mVideoPlayerState = savedInstanceState.getInt(RECIPE_VIDEO_STATE) ;
+            mPlayWhenReady = savedInstanceState.getBoolean(RECIPE_VIDEO_PLAY_WHEN_READY) ;
         }
         // UpdateUI(mRecipe.getSteps().get(mCurrentStep)) ;
     }
@@ -205,7 +219,7 @@ public class RecipeStepFragment extends Fragment {
         // If the player is playing ... stop it
         //
         if ( mExoPlayer != null ) {
-            if ( mExoPlayer.getPlaybackState() != SimpleExoPlayer.STATE_IDLE) {
+            if ( mVideoPlayerState != SimpleExoPlayer.STATE_IDLE) {
                 mExoPlayer.stop();
             }
         }
@@ -222,8 +236,49 @@ public class RecipeStepFragment extends Fragment {
 
     private void initializeVideoPlayer() {
         if ( mExoPlayer == null ) {
-            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), new DefaultTrackSelector(),
-                    new DefaultLoadControl());
+            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), new DefaultTrackSelector(), new DefaultLoadControl());
+            mExoPlayer.addListener(new Player.EventListener() {
+                @Override
+                public void onTimelineChanged(Timeline timeline, Object manifest) {
+
+                }
+
+                @Override
+                public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+                }
+
+                @Override
+                public void onLoadingChanged(boolean isLoading) {
+
+                }
+
+                @Override
+                public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                    mPlayWhenReady = playWhenReady ;
+                    mVideoPlayerState = playbackState ;
+                    Log.d(TAG, "onPlayerStateChanged: playWhenReady = " + playWhenReady);
+                }
+
+                @Override
+                public void onRepeatModeChanged(int repeatMode) {
+
+                }
+
+                @Override
+                public void onPlayerError(ExoPlaybackException error) {
+
+                }
+
+                @Override
+                public void onPositionDiscontinuity() {
+
+                }
+
+                @Override
+                public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+                }
+            });
             mPlayerView.setPlayer(mExoPlayer);
         }
     }
@@ -240,7 +295,7 @@ public class RecipeStepFragment extends Fragment {
         mExoPlayer.seekTo(mVideoPlayerPosition);
         if ( mVideoPlayerState != SimpleExoPlayer.STATE_IDLE || mPlayerStateUnknown ) {
             mPlayerStateUnknown = false ;
-            mExoPlayer.setPlayWhenReady(true);
+            mExoPlayer.setPlayWhenReady(mPlayWhenReady);
         }
         mExoPlayer.prepare(mediaSource);
     }
