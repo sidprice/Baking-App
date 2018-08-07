@@ -54,7 +54,7 @@ public class CardsRecyclerViewAdapter extends RecyclerView.Adapter<CardsRecycler
                 holder.mServings_TextView.setText("Serves " + recipe.getServings() + " people");
                 //
                 if ( recipe.getImage().equals("")) {
-                    holder.mImage_ImageView.setImageResource(R.drawable.silverware_fork_knife);
+                    holder.mImage_ImageView.setImageResource(R.drawable.cake_making);
                 } else {
                     Picasso.get().load(recipe.getImage()).into(holder.mImage_ImageView);
                 }
