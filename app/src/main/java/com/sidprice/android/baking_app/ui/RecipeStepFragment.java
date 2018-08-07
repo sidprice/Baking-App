@@ -3,7 +3,6 @@ package com.sidprice.android.baking_app.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -26,7 +26,6 @@ import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.Player.EventListener;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
@@ -41,6 +40,7 @@ import com.google.android.exoplayer2.util.Util;
 import com.sidprice.android.baking_app.R;
 import com.sidprice.android.baking_app.model.Recipe;
 import com.sidprice.android.baking_app.model.Step;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,7 +55,7 @@ public class RecipeStepFragment extends Fragment {
     private Context     mContext ;
     @BindView(R.id.step_description)        TextView    mDescription_tv ;
     @BindView(R.id.step_video_player)       SimpleExoPlayerView mPlayerView;
-    @BindView(R.id.step_no_video_image)     TextView     mPlayerNotAvailable;
+    @BindView(R.id.step_recipe_thumbnail)   ImageView   mRecipeThumbnail;
     @BindView(R.id.step_next)               Button      mNextButton ;
     @BindView(R.id.step_previous)           Button      mPreviousButton ;
 
@@ -102,6 +102,7 @@ public class RecipeStepFragment extends Fragment {
                 mCurrentStep++ ;
                 mVideoPlayerPosition = 0 ;
                 mVideoPlayerState = SimpleExoPlayer.STATE_IDLE ;
+                mPlayWhenReady = true ;     // Will start any video in the next step
                 UpdateUI(mRecipe.getSteps().get(mCurrentStep));
             }
         });
@@ -114,6 +115,7 @@ public class RecipeStepFragment extends Fragment {
                 mCurrentStep--;
                 mVideoPlayerPosition = 0 ;
                 mVideoPlayerState = SimpleExoPlayer.STATE_IDLE ;
+                mPlayWhenReady = true ;     // Will start any video in the previous step
                 UpdateUI(mRecipe.getSteps().get(mCurrentStep));
             }
         });
@@ -225,12 +227,20 @@ public class RecipeStepFragment extends Fragment {
         }
         if ( !step.getVideo_url().equals("") ) {
             mPlayerView.setVisibility(View.VISIBLE);
-            mPlayerNotAvailable.setVisibility(View.INVISIBLE);
+            mRecipeThumbnail.setVisibility(View.INVISIBLE);
             initializeVideoPlayer();
             setUriInPlayer(step) ;
         } else {
             mPlayerView.setVisibility(View.INVISIBLE);
-            mPlayerNotAvailable.setVisibility(View.VISIBLE);
+            if ( !step.getThumbnail_url().equals("") ) {
+                Picasso.get()
+                        .load(step.getThumbnail_url())
+                        .error(R.drawable.silverware_fork_knife)
+                        .into(mRecipeThumbnail);
+            } else {
+                mRecipeThumbnail.setImageResource(R.drawable.cake_making);
+            }
+            mRecipeThumbnail.setVisibility(View.VISIBLE);
         }
     }
 
@@ -293,10 +303,10 @@ public class RecipeStepFragment extends Fragment {
                 new ExtractorMediaSource(videoUri, new DefaultDataSourceFactory(context, userAgent),
                         new DefaultExtractorsFactory(), null, null);
         mExoPlayer.seekTo(mVideoPlayerPosition);
-        if ( mVideoPlayerState != SimpleExoPlayer.STATE_IDLE || mPlayerStateUnknown ) {
+       // if ( mVideoPlayerState != SimpleExoPlayer.STATE_IDLE || mPlayerStateUnknown ) {
             mPlayerStateUnknown = false ;
             mExoPlayer.setPlayWhenReady(mPlayWhenReady);
-        }
+        // }
         mExoPlayer.prepare(mediaSource);
     }
 
